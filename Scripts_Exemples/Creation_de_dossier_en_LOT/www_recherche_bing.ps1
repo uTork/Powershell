@@ -1,11 +1,14 @@
 # Script qui recherche des mot dans l'outil de recherche microsoft BIng
 # Le script retorune la description et e lien cible
 
+# Mot clé a rechercher dans Bing
 $keyword = "orignal"
 
+#Entete du CSV
 $query_h2 = @("Description,Lien")
 
-$page = @("10","20","30","40","50","60","70","80","90","100","110","120","130","140","150")
+#Sequence des nombre de resultat par page
+$page = @("1","10","20","30","40","50","60","70","80","90","100","110","120","130","140","150")
 
 foreach($p in $page){
 
@@ -13,6 +16,7 @@ $www = "https://www.bing.com/search?q=$keyword&qs=n&sp=-1&pq=$keyword&sc=8-5&sk=
 
 $select = Invoke-WebRequest -Uri $www
 
+#Filtre REGEX pour extraire les liens
 [regex]$reg = "https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)"
 
 
