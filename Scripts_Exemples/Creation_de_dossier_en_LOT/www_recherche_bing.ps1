@@ -1,25 +1,21 @@
-# Script qui recherche des mot dans l'outil de recherche microsoft BIng
-# Le script retorune la description et e lien cible
+# Usefull to get the search result faster then use Chrome.
+$keyword = "Sebastien+Matais"
 
-# Mot clé a rechercher dans Bing
-$keyword = "orignal"
-
-#Entete du CSV
 $query_h2 = @("Description,Lien")
 
-#Sequence des nombre de resultat par page
-$page = @("1","10","20","30","40","50","60","70","80","90","100","110","120","130","140","150")
+$number_of_result = 1000 #number to change to get more or less result
 
-foreach($p in $page){
+$p = 0
+
+while($p -lt $number_of_result){
 
 $www = "https://www.bing.com/search?q=$keyword&qs=n&sp=-1&pq=$keyword&sc=8-5&sk=&cvid=E0A3EC737EEA49248FA4EB56B2E093D0&first=$p&FORM=PERE"
 
 $select = Invoke-WebRequest -Uri $www
 
-#Filtre REGEX pour extraire les liens
 [regex]$reg = "https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)"
 
-
+$p = $p + 10 #add the next 10 result to the variable
 
 $query_h2 += @(
                 $select.ParsedHtml.body.getElementsByTagName("H2") | foreach{
@@ -34,3 +30,4 @@ $query_h2 += @(
 }
 
 $query_h2 | convertfrom-csv
+$query_h2.count
