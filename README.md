@@ -19,5 +19,5 @@ Powershell est un outil supérieur d'automatisation et de configuration multi-pl
 ##### Repository Microsoft: [ Powershell Gallery](https://www.powershellgallery.com/)
 
 ##### Exemples Scripts:
-- Creation de dossier HOME(utilisateur) automatiquement basé sur le nom de l'utilisateur
+- [Creation de dossier HOME(utilisateur) automatiquement basé sur le nom de l'utilisateur](https://github.com/uTork/Powershell/blob/master/Scripts_Exemples/Creation_de_dossier_en_LOT/creation_dossier_par_nom_utilisateur.ps1)
 - [Recherche dans Microsoft Bing](https://github.com/uTork/Powershell/blob/master/Scripts_Exemples/Creation_de_dossier_en_LOT/www_recherche_bing.ps1)
