@@ -1,5 +1,5 @@
 # Usefull to get the search result faster then use Chrome.
-$keyword = "Sebastien+Matais"
+$keyword = "Sebastien+Maltais"
 
 $query_h2 = @("Description,Lien")
 
