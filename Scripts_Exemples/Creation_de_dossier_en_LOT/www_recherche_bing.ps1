@@ -1,6 +1,6 @@
 # This function search a keyword on bing search engine and create a table with the search result
 
-function search-Bing {
+function Search-Bing {
 
 param($keyword,$number_of_result)
 
