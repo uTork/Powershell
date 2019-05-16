@@ -1,10 +1,16 @@
-# Usefull to get the search result faster then use Chrome.
-$keyword = "Sebastien+Maltais"
+# This function search a keyword on bing search engine and create a table with the search result
 
+function search-Bing {
+
+param($keyword,$number_of_result)
+
+
+# Table Header
 $query_h2 = @("Description,Lien")
 
-$number_of_result = 1000 #number to change to get more or less result
+$number_of_result = $number_of_result -replace " ","+"
 
+# Result counter
 $p = 0
 
 while($p -lt $number_of_result){
@@ -29,5 +35,10 @@ $query_h2 += @(
 
 }
 
+
+
 $query_h2 | convertfrom-csv
-$query_h2.count
+
+
+}
+
