@@ -1,6 +1,5 @@
 
 function Search-Bing {
-
 <#
 .SYNOPSIS
 Search Bing.com
