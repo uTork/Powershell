@@ -1,4 +1,4 @@
-
+# Recherche les évènement directement sur bing et donne le resultat
 function Get-Bing {
 
 param($keyword,$number_of_result)
