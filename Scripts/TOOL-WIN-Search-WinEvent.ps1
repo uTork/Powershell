@@ -1,6 +1,7 @@
 # Analyse Log and log sources
 
-$All = $false
+# All switch to select all logs sources.
+$All = $true
 
 $server = "localhost"
 
@@ -8,28 +9,30 @@ $server = "localhost"
 $provider = $event_source
 
 # Provider list if siwtch -ALL is on
-if($all -eq $true){$provider = Get-WinEvent -ListLog * -force -ErrorAction stop}
+if($all -eq $true){$provider = Get-WinEvent -ListLog * -force -ErrorAction SilentlyContinue}
 
 # Level of the event
 $level = "erreur"
 
 
-$provider = @(
-              "Microsoft-Windows-AppModel-Runtime/Admin"
-              "Microsoft-Client-Licensing-Platform/Admin"
-              )
+#$provider = @(
+#              "Microsoft-Windows-AppModel-Runtime/Admin"
+#              "Microsoft-Client-Licensing-Platform/Admin"
+#              )
 
 $level = "erreur"
 
 # Event List
 $event_list = @(
-                 $provider | foreach{$log_name = "Microsoft-Windows-AppModel-Runtime/Admin" #$_.logname
-                                     $event = Get-WinEvent -ComputerName $server -LogName $log_name | where-object {$_.leveldisplayname -eq $level}
+                 $provider | foreach{$log_name = $_.logname
+                                     $event = try{Get-WinEvent -ComputerName $server -LogName $log_name -Erroraction Stop | where-object {$_.leveldisplayname -eq $level}}catch{$event = $null}
                                      $event
                                     }
                 )
 
+# Date for HTML Report 
 $date_html = (get-date).DateTime
+
 # HTML Report Building...
 
 $html_report = @(
@@ -38,19 +41,19 @@ $html_report = @(
                 "<H2>Search-WinEvent HTML report</H2>"
                 "<style>"
                 'table, th, td {border: 1px solid black;padding: 15px;}'
-                #'table {table-layout:fixed}'
                 'td {white-space: nowrap}'       
                 "</style>"
                 "</head>"
                 "<body>"
-                "<H3>Server: $server Date: $date_html</H3>"
+                "<H3>Server: $server</H3>"
+                "<H3>Date:   $date_html</H3>"
                 )
 
 
 # HTML table Header
 $html_report += @(
                 '<table style="width:100%">'
-                "<tr><th>Event Source</th><th>Time Created</th><th>ID</th><th>Level</th><th>Message</th></tr>"
+                "<tr><th>Event Source</th><th>Time Created</th><th>ID</th><th>Level</th><th>Message</th><th>Google Results</th></tr>"
                 )
 
 # Table Row Creation
@@ -62,7 +65,12 @@ $html_report += @(
                                           $level = $_.leveldisplayname
                                           $message = $_.message
 
-                                          $table_row = "<tr><td>$provider</td><td>$timecreated</td><td>$event_id</td><td>$level</td><td>$message</td></tr>"
+                                          # Google search link on the event ID
+                                          [string]$google_http = "https://www.google.com/search?q=$provider+$event_id+$message"
+                                          [string]$google_link_name = "Google Event $event_id"
+                                          [string]$google_link = '<a href="' + $google_http + '" target="_blank">' + "$google_link_name</a>"
+
+                                          $table_row = "<tr><td>$provider</td><td>$timecreated</td><td>$event_id</td><td>$level</td><td>$message</td><td>$google_link</td></tr>"
                                           $table_row
                                           }
                                           )
@@ -83,4 +91,4 @@ $HTML_REPORT | SET-CONTENT -Path "C:\Users\test\OneDrive\Script\Search-WinEvent\
 start-process -FilePath "C:\Users\test\OneDrive\Script\Search-WinEvent\report.html"
 
 
-Finish for tonight. I continue in a second part of the streaming. bye bye
+# Part2 Terminated. I continue in Part3.... .... .... 
