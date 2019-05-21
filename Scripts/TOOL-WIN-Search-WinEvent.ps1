@@ -47,12 +47,13 @@ $html_report = @(
                 )
 
 
-# HTML tablea Header
+# HTML table Header
 $html_report += @(
                 '<table style="width:100%">'
                 "<tr><th>Event Source</th><th>Time Created</th><th>ID</th><th>Level</th><th>Message</th></tr>"
                 )
 
+# Table Row Creation
 $html_report += @(
                     $event_list | foreach{
                                           $timecreated = $_.timecreated
@@ -66,6 +67,7 @@ $html_report += @(
                                           }
                                           )
 
+# Close HTML file
 $html_report += @(
                    "</table>"    
                    "<p>Generate by Search-WinEvent powered by PowerShell</p>"
