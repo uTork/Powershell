@@ -1,5 +1,4 @@
 function Get-NameList {
-
 <#
 .SYNOPSIS
 Generate Name List from Magabay website https://names.mongabay.com
