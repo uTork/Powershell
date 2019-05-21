@@ -5,6 +5,7 @@ Generate Name List from Magabay website https://names.mongabay.com
 .DESCRIPTION
 This command create an array @("firstname,surname")
 .PARAMETER Number_of_users
+Number of user to create
 .EXAMPLE 
 Get-NameList -number_of_users 10000
 Give a list of 10 000 name
