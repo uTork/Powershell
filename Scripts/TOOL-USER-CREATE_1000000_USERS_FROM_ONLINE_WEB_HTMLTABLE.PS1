@@ -5,10 +5,7 @@ function Get-NameList {
 Generate Name List from Magabay website https://names.mongabay.com
 .DESCRIPTION
 This command create an array @("firstname,surname")
-.PARAMETER Number_of_name
-.EXAMPLE
-Search-Bing -keyword chien -number_of_result 200
-Give 200 results of the search
+.PARAMETER Number_of_users
 .EXAMPLE 
 Get-NameList -number_of_users 10000
 Give a list of 10 000 name
@@ -73,3 +70,7 @@ $number_of_name | %{
 
 $array | convertfrom-csv
 }
+
+
+
+
