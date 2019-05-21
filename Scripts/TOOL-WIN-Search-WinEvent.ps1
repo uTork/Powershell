@@ -35,15 +35,18 @@ $date_html = (get-date).DateTime
 $html_report = @(
                 "<html>"
                 "<head>"
-                "<H2>WinEvent HTML report</H2>"
+                "<H2>Search-WinEvent HTML report</H2>"
                 "<style>"
-                'table, th, td {border: 1px solid black;border-collapse: collapse;}'
-                'table {table-layout:fixed}'
+                'table, th, td {border: 1px solid black;padding: 15px;}'
+                #'table {table-layout:fixed}'
+                'td {white-space: nowrap}'       
                 "</style>"
                 "</head>"
                 "<body>"
                 "<H3>Server: $server Date: $date_html</H3>"
                 )
+
+
 # HTML tablea Header
 $html_report += @(
                 '<table style="width:100%">'
@@ -76,3 +79,6 @@ $html_report += @(
 $HTML_REPORT | SET-CONTENT -Path "C:\Users\test\OneDrive\Script\Search-WinEvent\report.html"
 
 start-process -FilePath "C:\Users\test\OneDrive\Script\Search-WinEvent\report.html"
+
+
+Finish for tonight. I continue in a second part of the streaming. bye bye
