@@ -1,6 +1,28 @@
 function Get-NameList {
 
-Param([int]$number_of_users)
+<#
+.SYNOPSIS
+Generate Name List from Magabay website https://names.mongabay.com
+.DESCRIPTION
+This command create an array @("firstname,surname")
+.PARAMETER Number_of_name
+.EXAMPLE
+Search-Bing -keyword chien -number_of_result 200
+Give 200 results of the search
+.EXAMPLE 
+Get-NameList -number_of_users 10000
+Give a list of 10 000 name
+.LINK
+Sebastien Maltais
+sebastien_maltais@hotmail.com
+https://github.com/uTork/Powershell/
+.INPUTS
+[string]
+.OUTPUTS
+[string] or [pscustomobject]
+#>
+
+Param([int]$number_of_name)
 
 # Surname list from a web site
 $uri = "https://names.mongabay.com/most_common_surnames.htm"
@@ -27,7 +49,7 @@ $firstname_list = $table_firstname -replace $filter
 $surname_count = $surname_list.count
 $firstname_count = $firstname_list.count
 
-$number_of_name = 1..$number_of_users
+$number_of_name = 1..$number_of_name
 $array = $null
 
 $array = @(
@@ -51,5 +73,3 @@ $number_of_name | %{
 
 $array | convertfrom-csv
 }
-
-
