@@ -1,19 +1,74 @@
-# Analyse Log and log sources
+function Search-WinEvent {
+<#
+.SYNOPSIS
+Analyze Windows logs for event id or specific event level and generate HTML report.
+
+.DESCRIPTION
+The script search ID or Event level in log sources
+
+.PARAMETER EventLog
+The name of the log you want to query. Ex: "application" or "Windows Networking Vpn Plugin Platform/Operational"
+
+.PARAMETER ALL
+Select all windows event log (replace the EventLog parameter. Take long time to analyze.
+
+.PARAMETER ID
+The event id you want to search.
+
+.PARAMETER HTML
+Show the result in HTML report and open the web browser.
+
+.PARAMETER Mail
+Attach and and send the html or csv report
+
+.PARAMETER SmtpServer
+Hostname or ip address of your mail smtp server
+
+.PARAMETER Port
+TCP/IP Port of your SMTP service
+
+.PARAMETER from_mail
+Mail address of the sender of this email. Ex: report@ispowershell.com
+
+.PARAMETER MailTo
+Mail address of the recipient.
+
+.PARAMETER from_mail
+Mail address of the sender of this email. Ex: report@ispowershell.com
+
+.EXAMPLE
+Search-Bing -keyword chien -number_of_result 200
+Give 200 results of the search
+.EXAMPLE 
+Search-Bing -keyword chien -number_of_result 200 -HTML
+Give 200 results of the search and open HTML report with the link
+.LINK
+SÃ©bastien Maltais
+sebastien_maltais@hotmail.com
+https://github.com/uTork/Powershell/
+.INPUTS
+[string]
+.OUTPUTS
+[string] or [pscustomobject]
+#>
+
+
+param([string]$EventLog,[switch]$ALL,[int]$ID,[string]$EventLevel,[switch]$Html,[switch]$mail,[string]$SmtpServer,[int]$port,[string]$from_mail,[string]$MailTo)
 
 # All switch to select all logs sources.
-$All = $false
+#$All = $false
 
-$server = "localhost"
+#$server = "localhost"
 
-$mail_address = "sebastien_maltais@hotmail.com"
+#$MailTo = "sebastien_maltais@hotmail.com"
 
-$level = "Avertissement"
+#$EventLevel = "critical"
 
-$html = $true
+#$html = $true
 
-$mail = $false
+#$mail = $false
 
-$id = "508"
+#$ID = $null
 
 ##testing testing testing....
 
@@ -21,31 +76,34 @@ $id = "508"
 #Culture | Translate the level to french if the Windows is in french langage
 $cult = (get-culture).name
 
+$level = $EventLevel
 if($cult -like "*FR*"){
 
                       if($level = "critical"){$level = "Critique"}
                       if($level = "error"){$level = "Erreur"}
                       if($level = "Warning"){$level = "Avertissement"}
-
+                      if($level = "Informational"){$level = "Information"}
+                      if($level = "Verbose"){$level = "Commentaires"}
+                      
                       }
 
 # Set the command on the event source parameter
 $provider = $event_source
 
 # Provider list if siwtch -ALL is on
-if($all -eq $true){$provider = Get-WinEvent -ListLog * -force -ErrorAction SilentlyContinue}
+if($all -eq $true){$provider = (Get-WinEvent -ListLog * -force -ErrorAction SilentlyContinue).LogName}
 
 
 
-$provider = @(
+$EventLog = @(
               "Application"
              )
 
 
 # Event List from the source
 $event_list = @(
-                 $provider | foreach{
-                                     $log_name = $_ #$_.logname
+                 $EventLog  | foreach{
+                                     $log_name = $_ 
 
                                      if($id -eq $null -and $level -ne $null){try{Get-WinEvent -ComputerName $server -LogName $log_name -Erroraction Stop | where-object {$_.leveldisplayname -eq $level}}catch{$event = $null}}
                                      if($id -ne $null -and $level -eq $null){try{Get-WinEvent -ComputerName $server -LogName $log_name -Erroraction Stop | where-object {$_.id -eq $id}}catch{$event = $null}}
@@ -97,12 +155,10 @@ $date_html = (get-date).DateTime
 $html_report = @(
                 "<html>"
                 "<head>"
-                "<H3>Windows Event | HTML report</H4>"
+                '<H3>Windows Events | <font color="#3399ff">HTML Report</font></H4>'
                 "<style>"
                 'table {table-layout:fixed;width:auto;white-space:nowrap;}'
-                'th, td {border: 1px solid black;padding: 15px;white-space: nowrap;max-width:100%;}'
-                #'th, td {width:100%;white-space: nowrap;border: 1px solid black;overflow:hidden;}'
-                #'td {white-space: nowrap}'       
+                'th, td {border: 1px solid black;padding: 15px;white-space: nowrap;max-width:100%;}'       
                 "</style>"
                 "</head>"
                 "<body>"
@@ -162,25 +218,27 @@ if($mail -eq $true){[string]$mail_body = $html_report}
 
 }
 
-# CSV/TEXT Report path
+# CSV/TEXT Report path for the mail attachement 
 $csv_path = $env:temp + "\report_search-winevent.csv"
 # Output the report to the console
 if($html -eq $false -and $mail -eq $false){$event_list | convertfrom-csv | Format-table}
 
-# Set the Body of the email with the text report                     
+# Set the Body of the email with the text report for the mail attachement                   
 If($html -eq $false -and $mail -eq $true){$event_list | export-csv -NoTypeInformation -Path $csv_path } 
 
 
 
-# Send report by email
+# Send report by mail
 if($mail -eq $true){
 
     $date_mail = (get-date).DateTime
-    $port = "25"
-    $subject = "WinEvent Report of the Computer: $env:computername | $date_mail"
-    $from_mail = "WinEvent_Report@ispowershell.com"
-    $SmtpServer = "smtp.videotron.ca"
+    #$port = "25"
+    $subject = "WinEvent Report of the Computer: $server | $date_mail"
+    #$from_mail = "WinEvent_Report@ispowershell.com"
+    #$SmtpServer = "smtp.videotron.ca"
     if($html -eq $true){$attachement = $html_path}else{$attachement = $csv_path}
+
+    # Body of the mail ...simple
     [string]$html_body = @(
                     "<hml>"
                     "<Head></head>"
@@ -198,15 +256,17 @@ if($mail -eq $true){
                                                          $SmtpPassword = ConvertTo-SecureString $SmtpPassword -AsPlainText -Force                                                 
                                                          $credential = New-Object -typename System.Management.Automation.PSCredential -argumentlist $SmtpUser, $SmtpPassword
                                                         }
-
+    # Smtp anonymous
     if($credential -eq $null){
-                              Send-mailmessage -from $from_mail -To $mail_address -Port $port -Body $html_body -Subject $subject -Attachments $attachement -SmtpServer $SmtpServer -Encoding UTF8 -BodyAsHtml
+                              Send-mailmessage -from $from_mail -To $MailTo -Port $port -Body $html_body -Subject $subject -Attachments $attachement -SmtpServer $SmtpServer -Encoding UTF8 -BodyAsHtml
                              }
-
+    # Smtp with Authentification
     if($credential -ne $null){
-                              Send-mailmessage -from $from_mail -To $mail_address -Port $port -Credential $credential  -Body $html_body -Attachments $attachement -Subject $subject -SmtpServer $SmtpServer -BodyAsHtml
+                              Send-mailmessage -from $from_mail -To $MailTo -Port $port -Credential $credential  -Body $html_body -Attachments $attachement -Subject $subject -SmtpServer $SmtpServer -BodyAsHtml
                              }
 
 
 }
+}
 
+# Part 4 terminated. Next step in part 5
