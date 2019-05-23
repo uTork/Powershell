@@ -1,3 +1,6 @@
+
+
+
 function Search-WinEvent {
 <#
 .SYNOPSIS
@@ -37,11 +40,23 @@ Mail address of the recipient.
 Mail address of the sender of this email. Ex: report@ispowershell.com
 
 .EXAMPLE
-Search-Bing -keyword chien -number_of_result 200
-Give 200 results of the search
+Show HTML report of the Warning event of the application log of the localhost
+Search-WinEvent -EventLog "application" -EventLevel "Warning" -Html
+
+
 .EXAMPLE 
-Search-Bing -keyword chien -number_of_result 200 -HTML
-Give 200 results of the search and open HTML report with the link
+Output in console the report of the error event of the system log of the localhost
+Search-WinEvent -EventLog "system" -EventLevel "Error" 
+
+.EXAMPLE
+Show HTML report of the Warning event of the application log of the remote server "server01"
+Search-WinEvent -computername "server01" -EventLog "application" -EventLevel "Warning" -Html
+
+
+.EXAMPLE 
+Output in console the report of the error event of the system log of the remote server "server01"
+Search-WinEvent -computername "server01" -EventLog "system" -EventLevel "Error"
+
 .LINK
 SÃ©bastien Maltais
 sebastien_maltais@hotmail.com
@@ -52,70 +67,60 @@ https://github.com/uTork/Powershell/
 [string] or [pscustomobject]
 #>
 
+param(
 
-param([string]$EventLog,[switch]$ALL,[int]$ID,[string]$EventLevel,[switch]$Html,[switch]$mail,[string]$SmtpServer,[int]$port,[string]$from_mail,[string]$MailTo)
+         [Parameter(Mandatory=$False, Position=0)][string] $ComputerName,
+         [Parameter(Mandatory=$False, Position=1)][string] $EventLog,
+         [Parameter(Mandatory=$False, Position=2)][switch]$ALL,
+         [Parameter(Mandatory=$False, Position=3)][int]$ID,
+         [Parameter(Mandatory=$true, Position=4)][string]$EventLevel,
+         [Parameter(Mandatory=$false, Position=5)][switch]$Html,
+         [Parameter(Mandatory=$false, Position=6)][switch]$mail,
+         [Parameter(Mandatory=$false, Position=7)][string]$SmtpServer,
+         [Parameter(Mandatory=$false, Position=8)][int]$port,
+         [Parameter(Mandatory=$false, Position=9)][string]$from_mail,
+         [Parameter(Mandatory=$false, Position=10)][string]$MailTo
 
-# All switch to select all logs sources.
-#$All = $false
-
-#$server = "localhost"
-
-#$MailTo = "sebastien_maltais@hotmail.com"
-
-#$EventLevel = "critical"
-
-#$html = $true
-
-#$mail = $false
-
-#$ID = $null
-
-##testing testing testing....
+    )
+$EventLog
+$EventLevel
+# Set Localhost as the computername
+if($computername -eq $null){$computername = "localhost"}
 
 
-#Culture | Translate the level to french if the Windows is in french langage
+
+# Translate the level to french if the Windows is in french langage
 $cult = (get-culture).name
 
-$level = $EventLevel
+
 if($cult -like "*FR*"){
 
-                      if($level = "critical"){$level = "Critique"}
-                      if($level = "error"){$level = "Erreur"}
-                      if($level = "Warning"){$level = "Avertissement"}
-                      if($level = "Informational"){$level = "Information"}
-                      if($level = "Verbose"){$level = "Commentaires"}
+                      if($EventLevel -eq "critical"){$EventLevel -eq "Critique"}
+                      if($EventLevel -eq "error"){$EventLevel -eq "Erreur"}
+                      if($EventLevel -eq "Warning"){$EventLevel -eq "Avertissement"}
+                      if($EventLevel -eq "Informational"){$EventLevel -eq "Information"}
+                      if($EventLevel -eq "Verbose"){$EventLevel -eq "Commentaires"}
                       
                       }
 
-# Set the command on the event source parameter
-$provider = $event_source
 
-# Provider list if siwtch -ALL is on
-if($all -eq $true){$provider = (Get-WinEvent -ListLog * -force -ErrorAction SilentlyContinue).LogName}
+# EventLog Full list if siwtch -ALL is on
+if($all -eq $true){$EventLog = (Get-WinEvent -ListLog * -force -ErrorAction SilentlyContinue).LogName}
 
-
-
-$EventLog = @(
-              "Application"
-             )
-
-
-# Event List from the source
 $event_list = @(
                  $EventLog  | foreach{
                                      $log_name = $_ 
 
-                                     if($id -eq $null -and $level -ne $null){try{Get-WinEvent -ComputerName $server -LogName $log_name -Erroraction Stop | where-object {$_.leveldisplayname -eq $level}}catch{$event = $null}}
-                                     if($id -ne $null -and $level -eq $null){try{Get-WinEvent -ComputerName $server -LogName $log_name -Erroraction Stop | where-object {$_.id -eq $id}}catch{$event = $null}}
-                                     if($id -ne $null -and $level -ne $null){try{Get-WinEvent -ComputerName $server -LogName $log_name -Erroraction Stop | where-object {$_.leveldisplayname -eq $level -and $_.id -eq $id}}catch{$event = $null}}
+                                     if($id -eq $null -and $EventLevel -ne $null){try{Get-WinEvent -ComputerName $computername -LogName $log_name -Erroraction Stop | where-object {$_.leveldisplayname -eq $EventLevel}}catch{$event = $null}}
+                                     if($id -ne $null -and $EventLevel -eq $null){try{Get-WinEvent -ComputerName $computername -LogName $log_name -Erroraction Stop | where-object {$_.id -eq $id}}catch{$event = $null}}
+                                     if($id -ne $null -and $EventLevel -ne $null){try{Get-WinEvent -ComputerName $computername -LogName $log_name -Erroraction Stop | where-object {$_.leveldisplayname -eq $EventLevel -and $_.id -eq $id}}catch{$event = $null}}
                                     }
                 )
 
-# Sort Alphabetical order
-$event_list = $event_list | sort ProviderName
 
-# Group Event by provider and ID
-$event_list = $event_list | Group-object id, Providername
+
+# Sort Alphabetical and Group Event by provider and ID
+$event_list = $event_list | sort ProviderName | Group-object id, Providername
 
 
 # PS object Creation from the last event of the set
@@ -162,7 +167,7 @@ $html_report = @(
                 "</style>"
                 "</head>"
                 "<body>"
-                '<H4>Server: <font color="#3399ff">' + $server + '</font></H3>'
+                '<H4>Server: <font color="#3399ff">' + $computername + '</font></H3>'
                 '<H5>Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#3399ff">' + $date_html + '</font></H5>'
                 )
 
@@ -232,10 +237,8 @@ If($html -eq $false -and $mail -eq $true){$event_list | export-csv -NoTypeInform
 if($mail -eq $true){
 
     $date_mail = (get-date).DateTime
-    #$port = "25"
-    $subject = "WinEvent Report of the Computer: $server | $date_mail"
-    #$from_mail = "WinEvent_Report@ispowershell.com"
-    #$SmtpServer = "smtp.videotron.ca"
+    $subject = "WinEvent Report of the Computer: $computername | $date_mail"
+
     if($html -eq $true){$attachement = $html_path}else{$attachement = $csv_path}
 
     # Body of the mail ...simple
@@ -268,5 +271,3 @@ if($mail -eq $true){
 
 }
 }
-
-# Part 4 terminated. Next step in part 5
