@@ -37,8 +37,6 @@ Default: 25
 eMail address of the sender of this email. Ex: report@ispowershell.com
 .PARAMETER MailTo
 eMail address of the recipient.
-.PARAMETER from_mail
-Mail address of the sender of this email. Ex: report@ispowershell.com
 .EXAMPLE
 Show HTML report of the Warning event of the application log of the localhost
 Search-WinEvent -EventLog "application" -EventLevel "Warning" -Html
