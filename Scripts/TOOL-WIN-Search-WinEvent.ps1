@@ -70,7 +70,8 @@ $server_list | foreach{Search-WinEvent -computername $_ -EventLog "Microsoft-Cli
 .LINK
 Sebastien Maltais
 sebastien_maltais@hotmail.com
-https://github.com/uTork/Powershell/
+LuinkedIn: https://www.linkedin.com/in/sebastienmaltais/
+GIT: https://github.com/uTork/Powershell/
 #>
 
 param(
