@@ -88,9 +88,9 @@ if($cult -like "*FR*"){
                       if($EventLevel -eq "Warning"){$EventLevel = "Avertissement"}
                       if($EventLevel -eq "Informational"){$EventLevel = "Information"}
                       if($EventLevel -eq "Verbose"){$EventLevel = "Commentaires"}
-                      
+                      }
 # Set Localhost as default computername
-if($ComputerName -eq ""){$ComputerName = "localhost"}                      }
+if($ComputerName -eq ""){$ComputerName = "localhost"}                      
 
 # Default SMTP Port
 if($port -eq ""){$port ="25"}
@@ -118,7 +118,7 @@ $event_list = @(
                                      if($id -ne "" -and $script:EventLevel -eq ""){try{Get-WinEvent -ComputerName $script:computername -LogName $log_name -Erroraction Stop | where-object {$_.id -eq $script:id}}catch{$event = $null}}
                                      if($id -ne "" -and $script:EventLevel -ne ""){try{Get-WinEvent -ComputerName $script:computername -LogName $log_name -Erroraction Stop | where-object {$_.leveldisplayname -eq $script:EventLevel -and $_.id -eq $script:id}}catch{$event = $null}}
                                     }
-                )#
+                )
 
 # Sort Alphabetical and Group Event by provider and ID
 $event_group = $event_list | sort ProviderName | Group-object id, Providername
@@ -169,12 +169,7 @@ $html_report = @(
                 )
 
 # HTML Table Header color
-if(
 $header_color = 'bgcolor="#3399ff"'
-
-
-
-
 
 # HTML table Header
 $html_report += @(
