@@ -23,7 +23,7 @@ Default: anonymous
 .PARAMETER Port
 TCP/IP Port of your SMTP service
 Default: 25
-.PARAMETER from_mail
+.PARAMETER MailFrom
 eMail address of the sender of this email. Ex: report@ispowershell.com
 .PARAMETER MailTo
 eMail address of the recipient.
