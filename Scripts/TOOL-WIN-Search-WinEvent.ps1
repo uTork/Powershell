@@ -40,7 +40,7 @@ Search-WinEvent -computername "server01" -EventLog "application" -EventLevel "Wa
 Output in console the report of the error event of the system log of the remote server "server01"
 Search-WinEvent -computername "server01" -EventLog "system" -EventLevel "Error"
 .LINK
-SÃ©bastien Maltais
+Sebastien Maltais
 sebastien_maltais@hotmail.com
 https://github.com/uTork/Powershell/
 .INPUTS
@@ -56,21 +56,16 @@ param(
          [int]$ID,
          [string]$EventLevel,
          [switch]$Html,
-         [switch]$mail,
          [string]$SmtpServer,
+         [string]$SmtpUser,
+         [string]$SmtpPassword,
          [int]$port,
-         [string]$from_mail,
+         [string]$MailFrom,
          [string]$MailTo
     )
 
-
-
-# Set Localhost as the computername
-if($ComputerName -eq ""){$ComputerName = "localhost"}
-
 # Translate the level to french if the Windows is in french langage
 $cult = (get-culture).name
-
 if($cult -like "*FR*"){
                       if($EventLevel -eq "critical"){$EventLevel = "Critique"}
                       if($EventLevel -eq "error"){$EventLevel = "Erreur"}
@@ -78,15 +73,26 @@ if($cult -like "*FR*"){
                       if($EventLevel -eq "Informational"){$EventLevel = "Information"}
                       if($EventLevel -eq "Verbose"){$EventLevel = "Commentaires"}
                       
-                      }
+# Set Localhost as default computername
+if($ComputerName -eq ""){$ComputerName = "localhost"}                      }
+
+# Default SMTP Port
+if($port -eq ""){$port ="25"}
 
 # EventLog Full list if siwtch -ALL is on
 if($all -eq $true){$EventLog = (Get-WinEvent -ListLog * -force -ErrorAction SilentlyContinue).LogName}
 
-
+# Set script scope variable
 $script:EventLevel = $EventLevel
 $script:id = $id
 $script:computername = $ComputerName
+$script:SmtpServer = $SmtpServer
+$script:port = $port
+[string]$script:from_mail = $MailFrom
+[string]$script:mailrecipient = $MailTo
+$script:SmtpPassword = $SmtpPassword
+$script:SmtpUser = $SmtpUser
+$script:HTML = $html
 
 $event_list = @(
                  $EventLog  | foreach{
@@ -103,7 +109,7 @@ $event_group = $event_list | sort ProviderName | Group-object id, Providername
 
 
 # PS object Creation from the last event of the set
-$event_Filtered = @(
+$script:event_Filtered = @(
                     $event_group | foreach{
                                           $gr = $_.group | sort TimeCreated
                                           $event = $gr | Select-Object -Last 1
@@ -129,7 +135,7 @@ $event_Filtered = @(
 
 
 # Generate HTML report in temp directory
-if($html -eq $true){
+if($script:HTML -eq $true){
 
 # Date for HTML Report 
 $date_html = (get-date).DateTime
@@ -139,15 +145,13 @@ $date_html = (get-date).DateTime
 $html_report = @(
                 "<html>"
                 "<head>"
-                '<H3>Windows Events | <font color="#3399ff">HTML Report</font></H4>'
+                '<H2>Windows Events | <font color="#3399ff">HTML Report</font> | VM/Server: <font color="#3399ff">' + $script:computername + '</font> | Date: <font color="#3399ff">' + $date_html + '</font></H2>'
                 "<style>"
                 'table {table-layout:fixed;width:auto;white-space:nowrap;}'
-                'th, td {border: 1px solid black;padding: 15px;white-space: nowrap;max-width:100%;}'       
+                'th, td {border: 1px solid black;padding: 8px;white-space: nowrap;max-width:100%;}'       
                 "</style>"
                 "</head>"
                 "<body>"
-                '<H4>Server: <font color="#3399ff">' + $computername + '</font></H3>'
-                '<H5>Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#3399ff">' + $date_html + '</font></H5>'
                 )
 
 # HTML Table Header color
@@ -161,7 +165,7 @@ $html_report += @(
                 
 # Table Row Creation
 $html_report += @(
-                    $event_Filtered | foreach{
+                    $script:event_Filtered | foreach{
                                               $timecreated = $_.timecreated
                                               $provider = $_.ProviderName
                                               $event_id = $_.id
@@ -190,38 +194,34 @@ $html_report += @(
 
 
 # HTML File Creation
-$html_path = $env:temp + "\report_search-winevent.html"
+$script:html_path = $env:temp + "\report_search-winevent.html"
 
-$HTML_REPORT | SET-CONTENT -Path $html_path
+$HTML_REPORT | SET-CONTENT -Path $script:html_path
 
 # Launch the web browser with the HTML Report
-if($mail -eq $false){start-process -FilePath $html_path}
-
-# Set the Body of the email with the HTML report
-if($mail -eq $true){[string]$mail_body = $html_report}
-
+if($script:SmtpServer -eq ""){start-process -FilePath $script:html_path}
 }
 
 # CSV/TEXT Report path for the mail attachement 
-$csv_path = $env:temp + "\report_search-winevent.csv"
+$script:csv_path = $env:temp + "\report_search-winevent.csv"
 
 # Output the report to the console
-if($html -ne $true -and $mail -ne $true){$event_Filtered | Format-table}
+if($script:HTML -ne $true -and $script:SmtpServer -ne $true){$script:event_Filtered | Format-table}
 
-
-Return $output
 # Set the Body of the email with the text report for the mail attachement                   
-If($html -ne $true -and $mail -eq $true){$event_Filtered | export-csv -NoTypeInformation -Path $csv_path } 
+If($script:HTML -ne $true -and $script:SmtpServer -eq $true){$script:event_Filtered | export-csv -NoTypeInformation -Path $script:csv_path} 
 
 
 
 # Send report by mail
-if($mail -eq $true){
+
+
+if($script:SmtpServer -ne ""){
 
     $date_mail = (get-date).DateTime
     $subject = "WinEvent Report of the Computer: $script:computername | $date_mail"
-
-    if($html -eq $true){$attachement = $html_path}else{$attachement = $csv_path}
+    $credential = $null
+    if($script:HTML -eq $true){$attachement = $script:html_path}else{$attachement = $script:csv_path}
 
     # Body of the mail ...simple
     [string]$html_body = @(
@@ -237,17 +237,17 @@ if($mail -eq $true){
 
 
     #SMTP Server credential user/pass
-    if($SmtpUser -ne $null -and $SmtpPassword -ne $null){
-                                                         $SmtpPassword = ConvertTo-SecureString $SmtpPassword -AsPlainText -Force                                                 
-                                                         $credential = New-Object -typename System.Management.Automation.PSCredential -argumentlist $SmtpUser, $SmtpPassword
+    if($script:SmtpUser -ne "" -and $script:SmtpPassword -ne ""){
+                                                         $script:SmtpPassword = ConvertTo-SecureString $script:SmtpPassword -AsPlainText -Force                                                 
+                                                         $credential = New-Object -typename System.Management.Automation.PSCredential -argumentlist $script:SmtpUser, $script:SmtpPassword
                                                         }
     # Smtp anonymous
     if($credential -eq $null){
-                              Send-mailmessage -from $from_mail -To $MailTo -Port $port -Body $html_body -Subject $subject -Attachments $attachement -SmtpServer $SmtpServer -Encoding UTF8 -BodyAsHtml
+                              try{Send-mailmessage -from $script:from_mail -To $script:mailrecipient -Port $script:port -Body $html_body -Subject $subject -Attachments $attachement -SmtpServer $script:SmtpServer -Encoding UTF8 -BodyAsHtml -ErrorAction stop}catch{$smtp_error = "SMTP Transport failure. Please try again";write-out $smtp_error}
                              }
     # Smtp with Authentification
     if($credential -ne $null){
-                              Send-mailmessage -from $from_mail -To $MailTo -Port $port -Credential $credential  -Body $html_body -Attachments $attachement -Subject $subject -SmtpServer $SmtpServer -BodyAsHtml
+                              try{Send-mailmessage -from $script:from_mail -To $script:mailrecipient -Port $script:port -Credential $credential  -Body $html_body -Attachments $attachement -Subject $subject -SmtpServer $script:SmtpServer -BodyAsHtml -ErrorAction stop}catch{$smtp_error = "SMTP Transport failure. Please try again";write-out $smtp_error}
                              }
 
 
