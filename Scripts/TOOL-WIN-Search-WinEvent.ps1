@@ -8,6 +8,16 @@ The script search ID or Event level in log sources
 The name of the log you want to query. Ex: "application" or "Windows Networking Vpn Plugin Platform/Operational" or ....
 .PARAMETER ALL
 Select all windows event log (replace the EventLog parameter. Take long time to analyze.
+.PARAMETER EventLevel
+The level of the events you want to query.
+
+Value:
+      "critical"
+      "error"
+      "Warning"
+      "Informational"
+      "Verbose"
+
 .PARAMETER ID
 The event id you want to search.
 .PARAMETER HTML
@@ -56,8 +66,6 @@ $Server_list = @("Server01"
                  )
 
 $server_list | foreach{Search-WinEvent -computername $_ -EventLog "Microsoft-Client-Licensing-Platform/Admin" -EventLevel "information" -id "101" -html -SmtpServer "smtp.videotron.ca" -MailFrom "report@ispowershell.com" -MailTo "recipient@hotmail.com"}
-
-                 
 
 .LINK
 Sebastien Maltais
