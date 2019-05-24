@@ -68,8 +68,8 @@ $server_list | foreach{Search-WinEvent -computername $_ -EventLog "Microsoft-Cli
 .LINK
 Sebastien Maltais
 sebastien_maltais@hotmail.com
-LuinkedIn: https://www.linkedin.com/in/sebastienmaltais/
 GIT: https://github.com/uTork/Powershell/
+LinkedIn: https://www.linkedin.com/in/sebastienmaltais/
 #>
 
 param(
@@ -101,9 +101,9 @@ if($ComputerName -eq ""){$ComputerName = "localhost"}
 
 # Default SMTP Port
 if($port -eq ""){$port ="25"}
-
+$hello = "hello"
 # EventLog Full list if siwtch -ALL is on
-if($all -eq $true){$EventLog = (Get-WinEvent -ListLog * -force -ErrorAction SilentlyContinue).LogName}
+if($all -eq $true){[array]$EventLog = (Get-WinEvent -ListLog * -force -ErrorAction SilentlyContinue).LogName;write-output $hello}
 
 # Set script scope variable
 $script:EventLevel = $EventLevel
@@ -117,13 +117,19 @@ $script:SmtpPassword = $SmtpPassword
 $script:SmtpUser = $SmtpUser
 $script:HTML = $html
 
+$EventLog  | foreach{
+                     $log_name = $_ 
+                     $log_name
+                     }
+
 $event_list = @(
                  $EventLog  | foreach{
                                      $log_name = $_ 
-                                     
-                                     if($id -eq "" -and $script:EventLevel -ne ""){try{Get-WinEvent -ComputerName $script:computername -LogName $log_name -Erroraction Stop | where-object {$_.leveldisplayname -eq $script:EventLevel}}catch{$event = $null}}
-                                     if($id -ne "" -and $script:EventLevel -eq ""){try{Get-WinEvent -ComputerName $script:computername -LogName $log_name -Erroraction Stop | where-object {$_.id -eq $script:id}}catch{$event = $null}}
-                                     if($id -ne "" -and $script:EventLevel -ne ""){try{Get-WinEvent -ComputerName $script:computername -LogName $log_name -Erroraction Stop | where-object {$_.leveldisplayname -eq $script:EventLevel -and $_.id -eq $script:id}}catch{$event = $null}}
+                                     $script:computername
+                                     if($script:id -eq "" -and $script:EventLevel -ne ""){Get-WinEvent -ComputerName $script:computername -LogName $log_name}
+                                     if($script:id -eq "" -and $script:EventLevel -ne ""){try{Get-WinEvent -ComputerName $script:computername -LogName $log_name -Erroraction Stop | where-object {$_.leveldisplayname -eq $script:EventLevel}}catch{$event = $null}}
+                                     if($script:id -ne "" -and $script:EventLevel -eq ""){try{Get-WinEvent -ComputerName $script:computername -LogName $log_name -Erroraction Stop | where-object {$_.id -eq $script:id}}catch{$event = $null}}
+                                     if($script:id -ne "" -and $script:EventLevel -ne ""){try{Get-WinEvent -ComputerName $script:computername -LogName $log_name -Erroraction Stop | where-object {$_.leveldisplayname -eq $script:EventLevel -and $_.id -eq $script:id}}catch{$event = $null}}
                                     }
                 )
 
