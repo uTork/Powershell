@@ -250,7 +250,7 @@ if($script:SmtpServer -ne ""){
                     "<p>Hello,</p>"
                     "<p>This is an automatic email with your HTML Report. Do not reply this email</p>"
                     "</br>"
-                    "<p>Script created by : Sebastien Maltais - sebastien_maltais@hotmail.com</p>"
+                    "<p>Script created by  : Sebastien Maltais - sebastien_maltais@hotmail.com</p>"
                     "</body>"
                     "</html>"
                     )
@@ -260,9 +260,9 @@ if($script:SmtpServer -ne ""){
 
     #SMTP Server credential user/pass
     if($script:SmtpUser -ne "" -and $script:SmtpPassword -ne ""){
-                                                                $script:SmtpPassword = ConvertTo-SecureString $script:SmtpPassword -AsPlainText -Force                                                 
-                                                                $credential = New-Object -typename System.Management.Automation.PSCredential -argumentlist $script:SmtpUser, $script:SmtpPassword
-                                                                }
+                                                         $script:SmtpPassword = ConvertTo-SecureString $script:SmtpPassword -AsPlainText -Force                                                 
+                                                         $credential = New-Object -typename System.Management.Automation.PSCredential -argumentlist $script:SmtpUser, $script:SmtpPassword
+                                                        }
     # Smtp anonymous
     if($credential -eq $null){
                               try{Send-mailmessage -from $script:from_mail -To $script:mailrecipient -Port $script:port -Body $html_body -Subject $subject -Attachments $attachement -SmtpServer $script:SmtpServer -Encoding UTF8 -BodyAsHtml -ErrorAction stop}catch{$smtp_error = "SMTP Transport failure. Please try again";write-output $smtp_error}
