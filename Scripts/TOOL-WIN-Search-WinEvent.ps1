@@ -1,30 +1,32 @@
-
-
-
 function Search-WinEvent {
 <#
 .SYNOPSIS
-Analyze Windows logs for event id or specific event level and generate HTML report.
+Analyze Windows logs for event id or specific event level and generate HTML or CSV report. By Default: CSV
 .DESCRIPTION
 The script search ID or Event level in log sources
 .PARAMETER EventLog
-The name of the log you want to query. Ex: "application" or "Windows Networking Vpn Plugin Platform/Operational"
+The name of the log you want to query. Ex: "application" or "Windows Networking Vpn Plugin Platform/Operational" or ....
 .PARAMETER ALL
 Select all windows event log (replace the EventLog parameter. Take long time to analyze.
 .PARAMETER ID
 The event id you want to search.
 .PARAMETER HTML
-Show the result in HTML report and open the web browser.
-.PARAMETER Mail
-Attach and and send the html or csv report
+Show the result in HTML report and open the HTML file in the web browser.
 .PARAMETER SmtpServer
-Hostname or ip address of your mail smtp server
+Hostname or ip address of your smtp mail server
+.PARAMETER SmtpUser
+SMTP server username
+Default:anonymous
+.PARAMETER SmtpPassword
+SMTP server Password
+Default: anonymous
 .PARAMETER Port
 TCP/IP Port of your SMTP service
+Default: 25
 .PARAMETER from_mail
-Mail address of the sender of this email. Ex: report@ispowershell.com
+eMail address of the sender of this email. Ex: report@ispowershell.com
 .PARAMETER MailTo
-Mail address of the recipient.
+eMail address of the recipient.
 .PARAMETER from_mail
 Mail address of the sender of this email. Ex: report@ispowershell.com
 .EXAMPLE
@@ -39,21 +41,35 @@ Search-WinEvent -computername "server01" -EventLog "application" -EventLevel "Wa
 .EXAMPLE 
 Output in console the report of the error event of the system log of the remote server "server01"
 Search-WinEvent -computername "server01" -EventLog "system" -EventLevel "Error"
+.EXAMPLE
+Search event "101" in the EventLog "Microsoft-Client-Licensing-Platform/Admin" and the html report by email.
+Search-WinEvent -EventLog "Microsoft-Client-Licensing-Platform/Admin" -EventLevel "information" -id "101" -html -SmtpServer "smtp.videotron.ca" -MailFrom "report@ispowershell.com" -MailTo "sebastien_maltais@hotmail.com"
+.EXAMPLE
+Generate a report from a list of server to find the same id in the same source
+
+$Server_list = @("Server01"
+                 "Server12"
+                 "Server55"
+                 "Server43"
+                 "workstation1"
+                 "Server05"
+                 )
+
+$server_list | foreach{Search-WinEvent -computername $_ -EventLog "Microsoft-Client-Licensing-Platform/Admin" -EventLevel "information" -id "101" -html -SmtpServer "smtp.videotron.ca" -MailFrom "report@ispowershell.com" -MailTo "recipient@hotmail.com"}
+
+                 
+
 .LINK
 Sebastien Maltais
 sebastien_maltais@hotmail.com
 https://github.com/uTork/Powershell/
-.INPUTS
-[string]
-.OUTPUTS
-[string] or [pscustomobject]
 #>
 
 param(
          [string]$ComputerName,
          [string]$EventLog,
          [switch]$ALL,
-         [int]$ID,
+         [string]$ID,
          [string]$EventLevel,
          [switch]$Html,
          [string]$SmtpServer,
@@ -107,7 +123,6 @@ $event_list = @(
 # Sort Alphabetical and Group Event by provider and ID
 $event_group = $event_list | sort ProviderName | Group-object id, Providername
 
-
 # PS object Creation from the last event of the set
 $script:event_Filtered = @(
                     $event_group | foreach{
@@ -141,7 +156,6 @@ if($script:HTML -eq $true){
 $date_html = (get-date).DateTime
 
 # HTML Report Building...
-
 $html_report = @(
                 "<html>"
                 "<head>"
@@ -155,7 +169,12 @@ $html_report = @(
                 )
 
 # HTML Table Header color
+if(
 $header_color = 'bgcolor="#3399ff"'
+
+
+
+
 
 # HTML table Header
 $html_report += @(
@@ -192,7 +211,6 @@ $html_report += @(
                    "</HTML>"
                  )
 
-
 # HTML File Creation
 $script:html_path = $env:temp + "\report_search-winevent.html"
 
@@ -206,15 +224,12 @@ if($script:SmtpServer -eq ""){start-process -FilePath $script:html_path}
 $script:csv_path = $env:temp + "\report_search-winevent.csv"
 
 # Output the report to the console
-if($script:HTML -ne $true -and $script:SmtpServer -ne $true){$script:event_Filtered | Format-table}
+if($script:HTML -ne $true -and $script:SmtpServer -eq ""){$script:event_Filtered | Format-table}
 
 # Set the Body of the email with the text report for the mail attachement                   
-If($script:HTML -ne $true -and $script:SmtpServer -eq $true){$script:event_Filtered | export-csv -NoTypeInformation -Path $script:csv_path} 
-
-
+If($script:HTML -ne $true -and $script:SmtpServer -ne ""){$script:event_Filtered | Export-csv -NoTypeInformation -Encoding UTF8 -Delimiter "|" -Path $script:csv_path} 
 
 # Send report by mail
-
 
 if($script:SmtpServer -ne ""){
 
@@ -228,7 +243,10 @@ if($script:SmtpServer -ne ""){
                     "<hml>"
                     "<Head></head>"
                     "<body>"
-                    "<h2>The report is in the attachement</H2>"
+                    "<p>Hello,</p>"
+                    "<p>This is an automatic email with your HTML Report. Do not reply this email</p>"
+                    "</br>"
+                    "<p>Script created by  : Sebastien Maltais - sebastien_maltais@hotmail.com</p>"
                     "</body>"
                     "</html>"
                     )
@@ -243,13 +261,14 @@ if($script:SmtpServer -ne ""){
                                                         }
     # Smtp anonymous
     if($credential -eq $null){
-                              try{Send-mailmessage -from $script:from_mail -To $script:mailrecipient -Port $script:port -Body $html_body -Subject $subject -Attachments $attachement -SmtpServer $script:SmtpServer -Encoding UTF8 -BodyAsHtml -ErrorAction stop}catch{$smtp_error = "SMTP Transport failure. Please try again";write-out $smtp_error}
+                              try{Send-mailmessage -from $script:from_mail -To $script:mailrecipient -Port $script:port -Body $html_body -Subject $subject -Attachments $attachement -SmtpServer $script:SmtpServer -Encoding UTF8 -BodyAsHtml -ErrorAction stop}catch{$smtp_error = "SMTP Transport failure. Please try again";write-output $smtp_error}
                              }
     # Smtp with Authentification
     if($credential -ne $null){
-                              try{Send-mailmessage -from $script:from_mail -To $script:mailrecipient -Port $script:port -Credential $credential  -Body $html_body -Attachments $attachement -Subject $subject -SmtpServer $script:SmtpServer -BodyAsHtml -ErrorAction stop}catch{$smtp_error = "SMTP Transport failure. Please try again";write-out $smtp_error}
+                              try{Send-mailmessage -from $script:from_mail -To $script:mailrecipient -Port $script:port -Credential $credential  -Body $html_body -Attachments $attachement -Subject $subject -SmtpServer $script:SmtpServer -BodyAsHtml -ErrorAction stop}catch{$smtp_error = "SMTP Transport failure. Please try again";write-output $smtp_error}
                              }
 
 
 }
 }
+
