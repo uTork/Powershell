@@ -11,12 +11,12 @@ Select all windows event log (replace the EventLog parameter. Take long time to 
 .PARAMETER EventLevel
 The level of the events you want to query.
 
-Value:
-      "critical"
-      "error"
-      "Warning"
-      "Informational"
-      "Verbose"
+Event Level Value:
+                  "critical"
+                  "error"
+                  "Warning"
+                  "Informational"
+                  "Verbose"
 
 .PARAMETER ID
 The event id you want to search.
