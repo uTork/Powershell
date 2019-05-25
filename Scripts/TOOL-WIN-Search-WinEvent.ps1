@@ -1,3 +1,4 @@
+
 function Search-WinEvent {
 <#
 .SYNOPSIS
@@ -69,11 +70,14 @@ GIT: https://github.com/uTork/Powershell/
 LinkedIn: https://www.linkedin.com/in/sebastienmaltais/
 #>
 
+
+
 param(
          [string]$ComputerName,
          [string]$EventLog,
          [switch]$ALL,
          [string]$ID,
+         [ValidateSet('Critical','Error','Warning','Informational','Verbose')]
          [string]$EventLevel,
          [switch]$Html,
          [string]$SmtpServer,
@@ -87,11 +91,11 @@ param(
 # Translate the level to french if the Windows is in french langage
 $cult = (get-culture).name
 if($cult -like "*FR*"){
-                      if($EventLevel -eq "critical"){$EventLevel = "Critique"}
-                      if($EventLevel -eq "error"){$EventLevel = "Erreur"}
-                      if($EventLevel -eq "Warning"){$EventLevel = "Avertissement"}
-                      if($EventLevel -eq "Informational"){$EventLevel = "Information"}
-                      if($EventLevel -eq "Verbose"){$EventLevel = "Commentaires"}
+                      if($EventLevel -eq "critical"){[string]$EventLevel = "Critique"}
+                      if($EventLevel -eq "error"){[string]$EventLevel = "Erreur"}
+                      if($EventLevel -eq "Warning"){[string]$EventLevel = "Avertissement"}
+                      if($EventLevel -eq "Informational"){[string]$EventLevel = "Information"}
+                      if($EventLevel -eq "Verbose"){[string]$EventLevel = "Commentaires"}
                       }
 # Set Localhost as default computername
 if($ComputerName -eq ""){$ComputerName = "localhost"}                      
@@ -100,7 +104,7 @@ if($ComputerName -eq ""){$ComputerName = "localhost"}
 if($port -eq ""){$port ="25"}
 
 # EventLog Full list if siwtch -ALL is on
-if($all -eq $true){[array]$EventLog = (Get-WinEvent -ListLog * -force -ErrorAction SilentlyContinue).LogName;write-output $hello}
+if($all -eq $true){[array]$EventLog = (Get-WinEvent -ListLog * -force -ErrorAction SilentlyContinue).LogName}
 
 # Set script scope variable
 $script:EventLevel = $EventLevel
