@@ -2,22 +2,22 @@
 
 # Array1 CSV
 
-$array1 = import-csv -path C:\Users\test\OneDrive\Script\Merge-Array\fsrm_quota_report.txt
+$array11 = import-csv -path C:\Users\test\OneDrive\Script\Merge-Array\fsrm_quota_report.txt
 
 [string]$Array1Properties = "User"
 
 # Array 2 CSV
 
-$array2 = import-csv -path C:\Users\test\OneDrive\Script\Merge-Array\Exchange_MailBox_report.txt
+$array22 = import-csv -path C:\Users\test\OneDrive\Script\Merge-Array\Exchange_MailBox_report.txt
 
 
 
-function Merge-Array{
+function  Merge-Array{
 
 param(
-       [string]$Array1,
+       [Array]$Array1,
        [string]$array1Property,
-       [string]$Array2,
+       [Array]$Array2,
        [string]$array2Property,
        [switch]$Table,
        [string]$CSVPath
@@ -26,7 +26,7 @@ param(
 
 # Setup Data Source 1
 [array]$array1_properties_list = $array1 | Get-Member | Where-Object{$_.MemberType -eq "NoteProperty"}
-$array1_properties_name = $array1_property_list.name | where-object {$_ -ne $Array1Property}
+$array1_properties_name = $array1_properties_list.name | where-object {$_ -ne $Array1Property}
 
 
 # Setup the datasource 2
@@ -39,9 +39,9 @@ $final_array = foreach($A1 in $array1){
                                         # Create Ps Object
                                         $obj = New-Object PSObject
                                           
-                                        $primary_property_array1 = $A1."$Array1Properties"
+                                        $primary_property_array1 = $A1."$array1Property"
                                         $Array1_pro_1_PrimaryKey = $primary_property_array1
-
+                                       
                                                                 foreach($propname in $array1_properties_name){
 
                                                                                                                 New-Variable -Name "Array1_pro_$propname" -Value $A1."$propname" -force
@@ -51,21 +51,18 @@ $final_array = foreach($A1 in $array1){
 
                                                                 foreach($A2 in $array2){
 
-                                                                                        $primary_property_array2 = $A2."$Array2Properties"
+                                                                                        $primary_property_array2 = $A2."$array2Property"
 
                                                                                        
 
                                                                                         if($primary_property_array2-eq $primary_property_array1 ){
 
                                                                                         foreach($propname in $array2_properties_name){
-
                                    
                                                                                                                                         New-Variable -Name "Array2_pro_$propname" -Value $A2."$propname" -Force
 
-
-
-                                                                                                                                        }
-
+                                                                                                                                      }
+                                                                                        
                                                                                         $var_list = get-variable | where-object {$_.name -like "Array1_pro_*"}
                                                                                         $var_list += get-variable | where-object {$_.name -like "Array2_pro_*"} 
 
@@ -114,5 +111,3 @@ $final_array | convertto-csv | convertfrom-csv
 
 
 }
-
-Merge-Array -Array1 $array1 -array1Property "User" -Array2 $array2 -array2Property "Samaccountname"
