@@ -49,7 +49,7 @@ Show HTML report of the Warning event of the application log of the remote serve
 Search-WinEvent -computername "server01" -EventLog "application" -EventLevel "Warning" -Html
 .EXAMPLE
 Search event "101" in the EventLog "Microsoft-Client-Licensing-Platform/Admin" and send the html report by email.
-Search-WinEvent -EventLog "Microsoft-Client-Licensing-Platform/Admin" -EventLevel "information" -id "101" -html -SmtpServer "smtp.videotron.ca" -MailFrom "report@ispowershell.com" -MailTo "sebastien_maltais@hotmail.com"
+Search-WinEvent -EventLog "Microsoft-Client-Licensing-Platform/Admin" -EventLevel "information" -id "101" -html -SmtpServer "smtp.example.com" -MailFrom "report@ispowershell.com" -MailTo "sebastien_maltais@hotmail.com"
 .EXAMPLE
 Generate a report from a list of server to find the same id in the same source
 
