@@ -1,0 +1,89 @@
+# Live Demo Project(LDP) : Install Windows Server 2019 Core Edition and install Universal Dashbord Community Edition.
+
+# Status: Install Windows server in Virtual Box VM
+
+# Description: To save money and ressources. The mission is to use universal dashboard on windows core.
+
+# Duration: ~5h
+
+# I have downloaded the ISO of Windows Server 2019 Core on the Microsoft Evaluation Center Website.
+
+# Vm Creation in virtual box! LOADING...........
+
+# Set My keyboasrd to french canadian... because i am french canadian! You chose your keyboard.
+
+# Set Local Administrator Password: Pikachu888!   (its my choice... chooose your)
+
+# Run the command SCONFIG to configure the base of the server
+
+# Disable local firewall on the core server command : advfirewall set allprofiles state off
+
+# Set the trustedhost to all : set-item wsman:\localhost\Client\TrustedHosts -value * You have to run powershell ise in admin mode to run it
+
+# Connect PS remote session with powershell ISE!
+
+# Now i am connected to the core!!!! Its time to set the execution policy of the server
+
+# Install Windows update module from powershellGallery to update the server
+
+# I have to disable UAC on the core server. I got an error access denied when i do windows update.
+
+# Script to Disable UAC : https://gallery.technet.microsoft.com/scriptcenter/Disable-UAC-using-730b6ecd
+
+# Reconnect after the reboot of the server
+
+# Windows update take #2
+
+# Another investigation before the Part #2 of the demo
+
+# Install IIS and the component for Universal Dashboard
+
+# Install the run time hosting NET Core 2.1 Runtime & Hosting Bundle for Windows (v2.1.5)
+
+# I have to download the file with powerwhell
+
+# Install IIS ans ASP.NET 3.5 and 4.7
+
+$r = @(
+"Web-Server"
+"Web-Asp-Net"
+"Web-Asp-Net45"
+       )
+
+$r | foreach{Install-WindowsFeature -Name $_}
+
+# Run the script to install .net core... To investigate... its works!!!!
+
+# The Script to install DOTNET CORE https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-install-script
+
+# Install Universal-Dashbord Community from powershell Gallery!!!
+
+# i lost de communication because of the core installation from the script
+
+# i have to reconnect
+
+#install UD community
+
+## problemem with powershell GET
+
+# Close PSsession to reload the module
+
+Install-Module -Name UniversalDashboard.Community
+
+# copy the content of the module in the wwwroot folder on the c:\
+
+$wwwroot = "C:\inetpub\wwwroot\"
+$ps1 = "C:\inetpub\wwwroot\dashboard.ps1"
+$mod = "C:\Program Files\windowspowershell\modules\UniversalDashboard.Community\2.4.1\"
+
+$item = gci $wwwroot
+
+#$item | Copy-Item -Destination $wwwroot
+
+get-content -Path $ps1
+
+dashboard.ps1
+
+# start the dashbord .\dashboard.ps1 and its work on port 10000 in iis you can start multiple dashbord. LOOK
+
+# http://192.168.0.129:10000 ITS WORK!!!!! 
