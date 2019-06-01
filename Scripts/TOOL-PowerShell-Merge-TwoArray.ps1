@@ -1,10 +1,10 @@
 function  Merge-TwoArray{
 
 param(
-       [Array]$Array1,
-       [string]$Array1Property,
-       [Array]$Array2,
-       [string]$Array2Property,
+       [parameter(Mandatory=$true)][ValidateNotNullOrEmpty()] [Array]$Array1,
+       [parameter(Mandatory=$true)][ValidateNotNullOrEmpty()] [string]$Array1Property,
+       [parameter(Mandatory=$true)][ValidateNotNullOrEmpty()] [Array]$Array2,
+       [parameter(Mandatory=$true)][ValidateNotNullOrEmpty()] [string]$Array2Property,
        [switch]$Table,
        [string]$CSVPath
 
@@ -42,7 +42,6 @@ sebastien_maltais@hotmail.com
 GIT: https://github.com/uTork/Powershell/
 LinkedIn: https://www.linkedin.com/in/sebastienmaltais/
 #>
-
 
 
 # Setup the datasource 1
@@ -129,10 +128,4 @@ if ($Table -ne $true -and $CSVPath -eq ""){
 $final_array | convertto-csv | convertfrom-csv
 
 }
-
-
-
-
-
-
 }
