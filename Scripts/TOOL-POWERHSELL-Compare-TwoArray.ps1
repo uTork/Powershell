@@ -15,11 +15,11 @@ The script run in two phase.
 2- Detect property conflict. You have to rename it before the merging. Two property with the same name cannot coexist in a merging scenario.
 .PARAMETER Array1
 The name of the first Array you want to compare
-.PARAMETER $Array1Property
+.PARAMETER Array1Property
 The primary property of the Array1
 .PARAMETER Array2
 The name of the first Array you want to compare
-.PARAMETER $Array2Property
+.PARAMETER Array2Property
 The primary property of the Array2
 .EXAMPLE 
 Compare two array
@@ -51,6 +51,8 @@ $message = "Launch: Primary property match: [Array1: $array1property] = [Array2:
 Write-Host $message -ForegroundColor Green
 $line = "--------------------------------------------------------------------------------------------------------------------------------"
 Write-Host $line -ForegroundColor Green
+
+# Extract primary property value different
 $compare_property_list | foreach{
                                  $object_name = $_.InputObject
                                  $object_indicator = $_.sideindicator
@@ -60,6 +62,7 @@ $compare_property_list | foreach{
                                  }
 Write-Host $line -ForegroundColor Green
 
+# Create a list of all properties of the array and Exclude the primary property from this list
 [array]$Array1propertieslist = ($array1 | get-member | Where-Object {$_.membertype -eq "noteproperty"} | Where-Object {$_.name -ne $array1property}).name
 [array]$Array2propertieslist = ($array2 | get-member | Where-Object {$_.membertype -eq "noteproperty"} | Where-Object {$_.name -ne $array2property}).name
 
@@ -81,4 +84,4 @@ $message = "If you dont have any conflict Error. You can merge these array. Lets
 Write-Host $message -ForegroundColor cyan
 }
 
-  
+                                 
