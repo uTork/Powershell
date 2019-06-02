@@ -1,0 +1,50 @@
+
+# Two Array to compare in dev env
+[array]$csv1 = import-csv -path "C:\Users\test\OneDrive\Script\TwoArray\fsrm_quota_report.txt"
+[array]$csv2 = import-csv -path "C:\Users\test\OneDrive\Script\TwoArray\Exchange_MailBox_report.txt"
+
+$array1 = $csv1
+$array2 = $csv2
+
+# Extraction of the properties of the array
+[array]$array1_properties = ($array1 | Get-member | Where-Object {$_.membertype -eq "Noteproperty"}).name
+[array]$array2_properties = ($array2 | Get-member | Where-Object {$_.membertype -eq "Noteproperty"}).name
+
+# Compare the the properties of these array and find equal.
+$compare_properties = (Compare-Object -ReferenceObject $array1_properties -DifferenceObject $array2_properties -IncludeEqual | Where-Object {$_.sideindicator -eq "=="}).inputobject
+
+[int]$number_of_properties = $array2_properties.count
+
+
+
+$expression1 = 0..$number_of_properties | foreach {
+                                                                $num = $_
+                                                                $property = $array2_properties[$num]
+                                                                
+                                                                foreach($equal in $compare_properties){
+
+                                                                if($property -ne $null){
+                                                                if($equal -eq $property){$newname = "C_$equal";$value = "expression={" + '$_.'  + $property + '}; label="' + $newname + '"';$value}
+                                                                if($equal -ne $property){$value = "expression={" + '$_.' + $property + '}; label="' + $property + '"';$value}
+                                                                                       }
+
+
+
+                                                                
+                                                              }
+                         }
+
+
+
+$expression1 = $expression1 | Sort-Object -Unique
+
+
+$final1 = $expression1[0]
+[string]$final = "@{$final1}"
+
+#expression={$_.User}; label="test"
+
+
+$csv2 | Select-Object "$final"
+
+# Blocked on the variable hastable....
