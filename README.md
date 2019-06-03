@@ -1,23 +1,24 @@
 # ![logo][] PowerShell
 
-##### Bienvenue sur mon GIT PowerShell 5.1
-Powershell est un outil supérieur d'automatisation et de configuration multi-plates-formes (Windows, Linux et macOS) qui fonctionne bien avec vos outils existants. Il est optimisé pour traiter des données structurées (JSON, CSV, XML, etc.). 
+##### Welcome on my GIT PowerShell 5.1
+Welcome to my GIT PowerShell 5.1
+Powershell is a superior multi-platform automation and configuration tool (Windows, Linux and macOS) that works well with your existing tools. It is optimized for processing structured data (JSON, CSV, XML, etc.).
 
 [logo]: https://raw.githubusercontent.com/PowerShell/PowerShell/master/assets/ps_black_64.svg?sanitize=true
 
-#### Le GIT est consacré à des exemples de scripts powershell et d’utilisation de modules.
+#### The GIT is devoted to examples of powershell scripts and the use of modules.
 
-**Mon Wiki:** [Wiki PowerShell](https://github.com/uTork/PowerShell/wiki)
+**My Wiki:** [PowerShell Wiki](https://github.com/uTork/PowerShell/wiki)
 
 ##### Exemples Modules: 
-- Module Active Directory | *Utilisation du module dans différents contexte AD*
-- Module Import-Excel | *Création de classeur à partir de sources de donnée, modification et fusion de documents excel.*
-- Module Winscp       | *Commande SSH, Transfert par SFTP/FTP de fichiers etc....*
-- Module Pswatch      | *Audit de dossier en temp réel. Rapporte la création,supression et modification des fichiers du dossier*
-- Module NTFSSecurity | *Gestion des permissions sur le système de fichier NTFS*
+- Module Active Directory | *Using the module in different Active Directory contexts*
+- Module Import-Excel | *Create workbook from data sources, edit and merge excel documents.*
+- Module Winscp       | *SSH command, SFTP / FTP transfer of files etc.....*
+- Module Pswatch      | *Real-time file audit. Reports the creation, deletion, and modification of the files in the folder*
+- Module NTFSSecurity | *Managing permissions on the NTFS file system*
 
 ##### Repository Microsoft: [ Powershell Gallery](https://www.powershellgallery.com/)
 
-##### Exemples Scripts:
-- [Creation de dossier HOME(utilisateur) automatiquement basé sur le nom de l'utilisateur](https://github.com/uTork/Powershell/blob/master/Scripts_Exemples/Creation_de_dossier_en_LOT/creation_dossier_par_nom_utilisateur.ps1)
-- [Recherche dans Microsoft Bing](https://github.com/uTork/Powershell/blob/master/Scripts_Exemples/Creation_de_dossier_en_LOT/www_recherche_bing.ps1)
+##### Scripts Examples:
+- [HOME Folder creation based on the username of the user ](https://github.com/uTork/Powershell/blob/master/Scripts_Exemples/Creation_de_dossier_en_LOT/creation_dossier_par_nom_utilisateur.ps1)
+- [Search on Microsoft Bing](https://github.com/uTork/Powershell/blob/master/Scripts_Exemples/Creation_de_dossier_en_LOT/www_recherche_bing.ps1)
