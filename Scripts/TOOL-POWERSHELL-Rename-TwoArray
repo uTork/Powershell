@@ -1,10 +1,33 @@
+function  Rename-TwoArray{
 
-# Two Array to compare in dev env
-[array]$csv1 = import-csv -path "C:\Users\test\OneDrive\Script\TwoArray\fsrm_quota_report.txt"
-[array]$csv2 = import-csv -path "C:\Users\test\OneDrive\Script\TwoArray\Exchange_MailBox_report.txt"
+param(
+       [parameter(Mandatory=$true)][ValidateNotNullOrEmpty()] [Array]$Array1,
+       [parameter(Mandatory=$true)][ValidateNotNullOrEmpty()] [Array]$Array2,
+       [switch]$Table
 
-$array1 = $csv1
-$array2 = $csv2
+
+)
+<#
+.SYNOPSIS
+Compare Two Array and find conflict in the properties names.
+.DESCRIPTION
+Find conflict before merging two array in only one. Rename the property of the second array with prefix "C_"
+.PARAMETER Array1
+The name of the first Array you want to compare
+.PARAMETER Array2
+The name of the first Array you want to compare
+.PARAMETER Table
+Output the result into a Table Format
+Merge-TwoArray -Array1 $array1 -array1Property "User" -Array2 $array2 -array2Property "Samaccountname" -Table
+.EXAMPLE
+Compare Two Array and output the result in a table.
+Rename-TwoArray -Array1 $arraY1 -Array2 $array2 -Table
+.LINK
+Sebastien Maltais
+sebastien_maltais@hotmail.com
+GIT: https://github.com/uTork/Powershell/
+LinkedIn: https://www.linkedin.com/in/sebastienmaltais/
+#>
 
 # Extraction of the properties of the array
 [array]$array1_properties = ($array1 | Get-member | Where-Object {$_.membertype -eq "Noteproperty"}).name
@@ -17,15 +40,26 @@ $compare_properties = (Compare-Object -ReferenceObject $array1_properties -Diffe
 
 
 
-$expression1 = 0..$number_of_properties | foreach {
+$expression = 0..$number_of_properties | foreach {
                                                                 $num = $_
                                                                 $property = $array2_properties[$num]
                                                                 
                                                                 foreach($equal in $compare_properties){
 
                                                                 if($property -ne $null){
-                                                                if($equal -eq $property){$newname = "C_$equal";$value = "expression={" + '$_.'  + $property + '}; label="' + $newname + '"';$value}
-                                                                if($equal -ne $property){$value = "expression={" + '$_.' + $property + '}; label="' + $property + '"';$value}
+                                                                if($equal -eq $property){        
+                                                                    @{
+                                                                        Name       = ('C_{0}' -f $property)
+                                                                        expression = [Scriptblock]::Create('$_.{0}' -f $property)
+                                                                     }
+                                                                     }
+                                                                if($equal -ne $property){        
+                                                                    @{
+                                                                        Name       = ('{0}' -f $property)
+                                                                        expression = [Scriptblock]::Create('$_.{0}' -f $property)
+                                                                     }
+                                                                                           }
+
                                                                                        }
 
 
@@ -33,18 +67,8 @@ $expression1 = 0..$number_of_properties | foreach {
                                                                 
                                                               }
                          }
+if($table -eq $true){$array2 | select-object $expression | Format-Table}
+if($table -ne $true){$array2 | select-object $expression}
 
 
-
-$expression1 = $expression1 | Sort-Object -Unique
-
-
-$final1 = $expression1[0]
-[string]$final = "@{$final1}"
-
-#expression={$_.User}; label="test"
-
-
-$csv2 | Select-Object "$final"
-
-# Blocked on the variable hastable....
+}
