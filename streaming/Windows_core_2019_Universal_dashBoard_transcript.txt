@@ -1,122 +1,89 @@
-get-UDDashboard | Stop-UDDashboard
+# Live Demo Project(LDP) : Install Windows Server 2019 Core Edition and install Universal Dashbord Community Edition.
 
-$servername = $env:computername
+# Status: Install Windows server in Virtual Box VM
 
-$date = Get-Date -format "dd-MMM-yyyy HH:mm"
+# Description: To save money and ressources. The mission is to use universal dashboard on windows core.
 
-$Dashboard_title = "| isPowerShell UDashboard | Server: $servername | Date: $date |"
+# Duration: ~5h
 
-# Last System Error Event
-$error_system = try{Get-EventLog -LogName System -EntryType Information  -ErrorAction stop | Sort-Object Time | Select-Object -Last 3}catch{$error_system_message = "No application Error";$sys_null = $true}
+# I have downloaded the ISO of Windows Server 2019 Core on the Microsoft Evaluation Center Website.
 
+# Vm Creation in virtual box! LOADING...........
 
-# Last Application Error Event
-$error_application = try{Get-EventLog -LogName application -EntryType information -ErrorAction stop | Sort-Object Time | Select-Object -Last 3}catch{$error_application_message = "No application Error";$app_null = $true}
+# Set My keyboasrd to french canadian... because i am french canadian! You chose your keyboard.
 
+# Set Local Administrator Password: Pikachu888!   (its my choice... chooose your)
 
+# Run the command SCONFIG to configure the base of the server
 
-$page = @( 
+# Disable local firewall on the core server command : advfirewall set allprofiles state off
 
+# Set the trustedhost to all : set-item wsman:\localhost\Client\TrustedHosts -value * You have to run powershell ise in admin mode to run it
 
-# Page Event Log
-            New-UDPage -Name "Event" -Content {
+# Connect PS remote session with powershell ISE!
 
-            New-UDHeading -Text "Event Dashboard Viewer" -Size 5
+# Now i am connected to the core!!!! Its time to set the execution policy of the server
 
-            New-UDTable -Title "System Event Log" -Headers @("Time", "Source", "Message") -FontColor "black" -Endpoint {
-                                        $error_system | Out-UDTableData -Property @("Timegenerated", "Source", "Message")
-                                      }
-            New-UDTable -Title "Application Event Log" -Headers @("Time", "Source", "Message") -FontColor "black" -Endpoint {
-                                        $error_application | Out-UDTableData -Property @("Timegenerated", "Source", "Message")
-                                        }
-                                        }  
+# Install Windows update module from powershellGallery to update the server
 
-# Page Processor & Memory
-            New-UDPage -Name "Memory & Processor" -Content {
+# I have to disable UAC on the core server. I got an error access denied when i do windows update.
 
-    New-UDRow {
-        New-UDColumn -Size 12 {
-            New-UDRow {
-                New-UDColumn -Size 6 {
-                            New-UDMonitor -Title "Memory(%)" -Type Line -Width "100%" -ChartBackgroundColor '#ff5050' -ChartBorderColor '#cc0000' -Endpoint {
-                                                $memory = get-counter "\Memory\% Committed Bytes In Use"| Select-Object -ExpandProperty CounterSamples | Select-object -ExpandProperty CookedValue
-                                                $memory | Out-UDMonitorData
-                                                                                   } -DataPointHistory 20 -RefreshInterval 5
-                                      }
+# Script to Disable UAC : https://gallery.technet.microsoft.com/scriptcenter/Disable-UAC-using-730b6ecd
 
-                New-UDColumn -Size 6 {
-                                    
-                             New-UDMonitor -Title "Processor(%)" -Type Line -Width "100%" -ChartBackgroundColor '#3399ff' -ChartBorderColor '#0000ff' -Endpoint {
-                                                $processor = get-counter "\processor(_total)\% processor time"| Select-Object -ExpandProperty CounterSamples | Select-object -ExpandProperty CookedValue
-                                                $processor | Out-UDMonitorData
-                                                                                   } -DataPointHistory 20 -RefreshInterval 1
+# Reconnect after the reboot of the server
 
+# Windows update take #2
 
-                }
-            }
-        }
+# Another investigation before the Part #2 of the demo
 
+# Install IIS and the component for Universal Dashboard
 
- 
-        }
+# Install the run time hosting NET Core 2.1 Runtime & Hosting Bundle for Windows (v2.1.5)
 
+# I have to download the file with powerwhell
 
+# Install IIS ans ASP.NET 3.5 and 4.7
 
+$r = @(
+"Web-Server"
+"Web-Asp-Net"
+"Web-Asp-Net45"
+       )
 
-          }
+$r | foreach{Install-WindowsFeature -Name $_}
 
-# Page Hard disk / Storage
+# Run the script to install .net core... To investigate... its works!!!!
 
-            New-UDPage -Name "Storage" -Content {
+# The Script to install DOTNET CORE https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-install-script
 
-    New-UDRow {
-        New-UDColumn -Size 12 {
-            New-UDRow {
-                New-UDColumn -Size 6 {
-                            New-UDMonitor -Title "Disk Access Time(%)" -Type Line -Width "100%" -ChartBackgroundColor '#ff5050' -ChartBorderColor '#cc0000' -Endpoint {
-                                                $diskusage = get-counter "\\bashboard-srv\physicaldisk(_total)\% disk time"| Select-Object -ExpandProperty CounterSamples | Select-object -ExpandProperty CookedValue
-                                                $diskusage | Out-UDMonitorData
-                                                                                   } -DataPointHistory 20 -RefreshInterval 5
-                                      }
+# Install Universal-Dashbord Community from powershell Gallery!!!
 
-                New-UDColumn -Size 6 {
-                                    New-UdChart -Title "Storage Space" -Type Bar -AutoRefresh -Endpoint {
-                                    [int]$freespace = get-counter -counter "\logicaldisk(_total)\% free space" | Select-Object -ExpandProperty CounterSamples | Select-object -ExpandProperty CookedValue
-                                         $freespace = [math]::Round($freespace)
+# i lost de communication because of the core installation from the script
 
-                                         $occupedspace = 100 - $freespace
+# i have to reconnect
 
-                                         $object = [PSCustomObject]@{Name = "Storage Total(%)";FreeSpace = $freespace;OccupedSpace = $occupedspace}
-                                
-                                         $object | Out-UDChartData -LabelProperty "Name" -Dataset @(
-                                                                    New-UdChartDataset -DataProperty "OccupedSpace" -Label "Occuped Space" -BackgroundColor "#80962F23" -HoverBackgroundColor "#80962F23"
-                                                                    New-UdChartDataset -DataProperty "FreeSpace" -Label "Free Space" -BackgroundColor "#8014558C" -HoverBackgroundColor "#8014558C"
-                                                                                              )
-                                                }
-                                        }
-                                }
-                                }
-        }
+#install UD community
 
+## problemem with powershell GET
 
- 
-     }
+# Close PSsession to reload the module
 
-         )
+Install-Module -Name UniversalDashboard.Community
 
+# copy the content of the module in the wwwroot folder on the c:\
 
+$wwwroot = "C:\inetpub\wwwroot\"
+$ps1 = "C:\inetpub\wwwroot\dashboard.ps1"
+$mod = "C:\Program Files\windowspowershell\modules\UniversalDashboard.Community\2.4.1\"
 
+$item = gci $wwwroot
 
-$Dashboard = New-UDDashboard -Pages $page
+#$item | Copy-Item -Destination $wwwroot
 
+get-content -Path $ps1
 
+dashboard.ps1
 
+# start the dashbord .\dashboard.ps1 and its work on port 10000 in iis you can start multiple dashbord. LOOK
 
-Start-UDDashboard -Dashboard $Dashboard -Port 10001
-
-
-
-
-
-
-
+# http://192.168.0.129:10000 ITS WORK!!!!! 
