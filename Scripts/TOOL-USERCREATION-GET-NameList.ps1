@@ -2,6 +2,7 @@ function Get-NameList {
 <#
 .SYNOPSIS
 Generate Name List from Magabay website https://names.mongabay.com
+NOT WORKING ON WINDOWS CORE EDITION
 .DESCRIPTION
 This command create an array @("firstname,surname")
 .PARAMETER Number_of_users
