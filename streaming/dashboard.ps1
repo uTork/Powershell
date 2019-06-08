@@ -102,8 +102,48 @@ $page = @(
  
      }
 
-         )
+         
 
+# Page CNN news
+New-UDPage -Name "News" -Content {
+
+
+                           $www = "http://rss.cnn.com/rss/cnn_topstories.rss"
+                    [array]$cnn = (Invoke-RestMethod -Uri $www).description
+                      [int]$news_count = $cnn.count
+
+
+
+                    [array]$news_list  = foreach($text in $cnn){
+                                                       
+                                            $pos = $text.IndexOf("<div")
+                                            $news = $text.Substring(0, $pos)
+                                            $news
+                                                                }
+
+0..$news_count | foreach{
+
+     $num = $_
+     [string]$text = $news_list[$num]
+    new-udcard -Title "CNN NEWS" -Content {$text}
+                                             
+                        }
+                                            
+
+
+    
+
+                    
+                                                           
+                         
+                                                                     
+                                                                     
+
+}
+                
+                
+                
+                )
 
 
 
@@ -113,8 +153,6 @@ $Dashboard = New-UDDashboard -Pages $page
 
 
 Start-UDDashboard -Dashboard $Dashboard -Port 10001
-
-
 
 
 
