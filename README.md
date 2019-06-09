@@ -7,7 +7,7 @@ Powershell is a superior multi-platform automation and configuration tool (Windo
 [logo]: https://raw.githubusercontent.com/PowerShell/PowerShell/master/assets/ps_black_64.svg?sanitize=true
 
 #### The GIT is devoted to examples of powershell scripts and the use of modules.
-**Live Streaming** [isPowerShell](http://www.facebook.com/ispowershell)
+**Live Streaming:** [isPowerShell](http://www.facebook.com/ispowershell)
 
 **My Wiki:** [PowerShell Wiki](https://github.com/uTork/PowerShell/wiki)
 
