@@ -2,6 +2,8 @@
 
 $name_list = import-csv -path "C:\download\name.txt" -Encoding UTF8
 
+$name_list = $name_list | sort-object firstname,surname -unique
+
 $city_list = @(
                "Jonquiere"
                "Chicoutimi"
@@ -16,7 +18,7 @@ $city_list = @(
                "Los Angeles"
                )
 
-$Compagny_list = @(
+$Company_list = @(
                    "Nortel"
                    "Microsoft"
                    "Apple"
@@ -26,50 +28,31 @@ $Compagny_list = @(
                    "IsPowerShell"
                    )
 
-
-$Country_list = @(
-                  "Canada"
-                  "United-States"
-                  "Liban"
-                  "China"
-                  "India"
-                  )
-
 $department_list = @(
-                "IT"
-                "Administration"
-                "Maintenance"
-                "Worker"
-                )
+                     "IT"
+                     "Administration"
+                     "Maintenance"
+                     "Worker"
+                    )
+
 
 $CreationDate = (get-date).DateTime
 
 
-$manager_list = @(
-                  "Sebastien Maltais"
-                  "Elvis Gratton"
-                  "King Kave"
-                  "Manon Dutronc"
-                  "Bob Stoic"
-                  "Eric Clapton"
-                  "Jimmy Hendrix"
-                  )
-
 $path_list = (Get-ADOrganizationalUnit -filter * | where-object {$_.DistinguishedName -like "*OU=ispowershell,DC=ispowershell,DC=net" -and $_.DistinguishedName -ne "OU=ispowershell,DC=ispowershell,DC=net"}).DistinguishedName
 
+# User Creation
 $name_list | foreach{
 
-                    #ConvertTo-SecureString "Welcome1" -AsPlainText -Force
                     $firstname = $_.firstname
                     $surname = $_.surname
                     $name = $firstname
-                    $expirationDate = (get-date).AddYears(-1)
+                    [datetime]$expirationDate = (get-date).AddYears(1)
                     $defaultPassword = ConvertTo-SecureString "Welcome1" -AsPlainText -Force
                     $cannotchangepass = $false
                     $changepasslogon = $true
                     $city = get-random $city_list
-                    $Compagny = get-random $Compagny_list
-                    $country = get-random $Country_list
+                    $Compagny = get-random $Company_list
                     $department = get-random $department_list
                     $description = "The user is created the $creationdate"
                     $displayname = "$name $surname"
@@ -86,9 +69,9 @@ $name_list | foreach{
 
 
                     try{
-                    New-ADUser -Name $name -AccountExpirationDate $expirationDate
-                    #-AccountExpirationDate $expirationDate -AccountPassword $defaultPassword -ChangePasswordAtLogon $changepasslogon -City $city -Company $Compagny -Country $country -Department $department -DisplayName $displayname  -EmailAddress $emailaddress  -Enabled $enabled  -Description $description -EmployeeID $employeeID -HomePage $homepage -PasswordNeverExpires $passwordneverexpire  -Path $path -SamAccountName $samaccount  -Surname $surname -UserPrincipalName $userPrincipalName -ErrorAction Stop
-
+                    New-ADUser -Name $name -AccountExpirationDate $expirationDate -Path $path -AccountPassword $defaultPassword -ChangePasswordAtLogon $changepasslogon -City $city -Company $Compagny  -Department $department -DisplayName $displayname -EmailAddress $emailaddress -Enabled $enabled  -Description $description -EmployeeID $employeeID -HomePage $homepage -PasswordNeverExpires $passwordneverexpire -SamAccountName $samaccount  -Surname $surname -UserPrincipalName $userPrincipalName -ErrorAction Stop
+                    $message = "The user $displayname is created!"
+                    Write-Output $message
 	                }
 	                Catch
 	                {
@@ -102,4 +85,22 @@ $name_list | foreach{
 
 
 }
+
+# Group Creation
+$user = get-aduser -filter * -Properties *
+$date_created = get-date
+$user | foreach{
+                $city = $_.city
+                $city = $city -replace " ","_"
+                $samaccountname = $_.samaccountname
+                $groupname = "GRP_" + $city + "_Global"
+                $path = get-random $path_list
+                $group = $null
+                $test = try{get-adgroup  -Identity $groupname -ErrorAction stop}catch{$group = "notexist"}
+
+                if($group -eq "notexist"){New-ADGroup -DisplayName $groupname -GroupScope Global -Description "Created the $date_created" -SamAccountName $groupname -Name $groupname -Path $path ;Add-ADGroupMember -Identity $groupname -Members $samaccountname;$message = "The group $groupname is created and the $samaccountname is added to the group $groupname";Write-Output $message}else{
+                Add-ADGroupMember -Identity $groupname -Members $samaccountname;$message = "The user $samaccountname is added to the group $groupname";Write-Output $message}
+                }
+
+
 
