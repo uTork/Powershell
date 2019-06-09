@@ -52,7 +52,7 @@ $name_list | foreach{
                     $cannotchangepass = $false
                     $changepasslogon = $true
                     $city = get-random $city_list
-                    $Compagny = get-random $Company_list
+                    $Compagy = get-random $Company_list
                     $department = get-random $department_list
                     $description = "The user is created the $creationdate"
                     $displayname = "$name $surname"
@@ -69,7 +69,7 @@ $name_list | foreach{
 
 
                     try{
-                    New-ADUser -Name $name -AccountExpirationDate $expirationDate -Path $path -AccountPassword $defaultPassword -ChangePasswordAtLogon $changepasslogon -City $city -Company $Compagny  -Department $department -DisplayName $displayname -EmailAddress $emailaddress -Enabled $enabled  -Description $description -EmployeeID $employeeID -HomePage $homepage -PasswordNeverExpires $passwordneverexpire -SamAccountName $samaccount  -Surname $surname -UserPrincipalName $userPrincipalName -ErrorAction Stop
+                    New-ADUser -Name $name -AccountExpirationDate $expirationDate -Path $path -AccountPassword $defaultPassword -ChangePasswordAtLogon $changepasslogon -City $city -Company $Company  -Department $department -DisplayName $displayname -EmailAddress $emailaddress -Enabled $enabled  -Description $description -EmployeeID $employeeID -HomePage $homepage -PasswordNeverExpires $passwordneverexpire -SamAccountName $samaccount  -Surname $surname -UserPrincipalName $userPrincipalName -ErrorAction Stop
                     $message = "The user $displayname is created!"
                     Write-Output $message
 	                }
