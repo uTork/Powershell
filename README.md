@@ -1,4 +1,4 @@
-# ![logo][] isPowerShell
+# ![logo][] *is*PowerShell
 [logo]: https://i.ibb.co/3Ty7Z7B/atome1.jpg
 
 ##### Welcome on my GIT PowerShell 5.1
