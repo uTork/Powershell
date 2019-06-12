@@ -1,8 +1,6 @@
 # ![logo][] *is*PowerShell
 [logo]: https://i.ibb.co/3Ty7Z7B/atome1.jpg
 
-##### Welcome on my GIT PowerShell 5.1
-Welcome to my GIT PowerShell 5.1
 Powershell is a superior multi-platform automation and configuration tool (Windows, Linux and macOS) that works well with your existing tools. It is optimized for processing structured data (JSON, CSV, XML, etc.).
 
 [logo]: https://raw.githubusercontent.com/PowerShell/PowerShell/master/assets/ps_black_64.svg?sanitize=true
