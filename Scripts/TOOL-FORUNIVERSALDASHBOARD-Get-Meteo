@@ -4,7 +4,8 @@ function Get-Meteo {
 .SYNOPSIS
 Get basic meteo information on a city in the world.
 .DESCRIPTION
-This script use the API https://openweathermap.org/api. You have to open a free account and get an APPID. Developed for use with Universal Dashboard.
+This script use the API https://openweathermap.org/api. You have to open a free account and get an APPID.
+Developed for use with Universal Dashboard.
 .PARAMETER City
 Enter the name of the city you want and get the meteo information
 .LINK
