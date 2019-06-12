@@ -16,7 +16,7 @@ LinkedIn: https://www.linkedin.com/in/sebastienmaltais/
 param([string]$City)
 
 # ID provided by https://openweathermap.org/api
-$api_id = "8d409c0358df4b499c11931e717f2561"
+$api_id = "8d409c0358df4b499c119399999f2561"
 
 # query the api
 $query = "http://api.openweathermap.org/data/2.5/weather?q=$city&APPID=$api_id"
