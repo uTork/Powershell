@@ -10,7 +10,7 @@ Powershell is a superior multi-platform automation and configuration tool (Windo
 
 **Wiki:** [isPowerShell Wiki (FR/EN)](https://github.com/uTork/PowerShell/wiki)
 
-##### Exemples Modules: 
+##### Modules Examples: 
 - Module Active Directory | *Using the module in different Active Directory contexts*
 - Module Import-Excel | *Create workbook from data sources, edit and merge excel documents.*
 - Module Winscp       | *SSH command, SFTP / FTP transfer of files etc.....*
