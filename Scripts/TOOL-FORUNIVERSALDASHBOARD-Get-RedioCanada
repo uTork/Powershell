@@ -1,0 +1,72 @@
+
+$Information = "Grands Titres"
+# Informations
+$Information_GrandsTitres = "https://ici.radio-canada.ca/rss/4159"
+$Information_EnContinu = "https://ici.radio-canada.ca/rss/1000524"
+
+$Thematique_Alimentation = "https://ici.radio-canada.ca/rss/7239"
+$Thematique_ArtdeVivre = "https://ici.radio-canada.ca/rss/4163"
+$Thematique_Economie = "https://ici.radio-canada.ca/rss/5717"
+$Thematique_Environnement = "https://ici.radio-canada.ca/rss/92408"
+$Thematique_Internationnal = "https://ici.radio-canada.ca/rss/96"
+$Thematique_JusticeFaitDivers = "https://ici.radio-canada.ca/rss/92411"
+$Thematique_Politique = "https://ici.radio-canada.ca/rss/4175"
+$Thematique_Sante = "https://ici.radio-canada.ca/rss/4175"
+$Thematique_Science = "https://ici.radio-canada.ca/rss/4165"
+$Thematique_Techno = "https://ici.radio-canada.ca/rss/4169"
+
+# Sports
+$Sport_Football = "https://ici.radio-canada.ca/rss/1000057"
+$Sport_GrandsTitres = "https://ici.radio-canada.ca/rss/771"
+$Sport_hockey = "https://ici.radio-canada.ca/rss/1000056"
+$Sport_Olympique = "https://ici.radio-canada.ca/rss/64852"
+$Sport_Podium = "https://ici.radio-canada.ca/rss/555082"
+$Sport_Soccer = "https://ici.radio-canada.ca/rss/1000058"
+$Sport_Tennis = "https://ici.radio-canada.ca/rss/1000059"
+
+# Arts
+$Art_Celebrites = "https://ici.radio-canada.ca/rss/1000232"
+$Art_Cinema = "https://ici.radio-canada.ca/rss/1000229"
+$Art_GrandsTitres = "https://ici.radio-canada.ca/rss/4167"
+$Art_Humour = "https://ici.radio-canada.ca/rss/1000231"
+$Art_Livres = "https://ici.radio-canada.ca/rss/1000083"
+$Art_Musique = "https://ici.radio-canada.ca/rss/1000230"
+$Art_Tele = "https://ici.radio-canada.ca/rss/1000233"
+
+# Regions
+$Region_AbitibiTémiscamingue = "https://ici.radio-canada.ca/rss/5763"
+$Region_Alberta = "https://ici.radio-canada.ca/rss/5767"
+$Region_BasStLaurent = "https://ici.radio-canada.ca/rss/35004"
+$Region_ClombieBritanique = "https://ici.radio-canada.ca/rss/5769"
+$Region_CoteNord = "https://ici.radio-canada.ca/rss/35019"
+$Region_Estrie = "https://ici.radio-canada.ca/rss/5773"
+$Region_GaspésieÎlesdelaMadeleine = "https://ici.radio-canada.ca/rss/35015"
+$Region_GrandMontreal = "https://ici.radio-canada.ca/rss/4201"
+$Region_GrandNord = "https://ici.radio-canada.ca/rss/1001049"
+$Region_IlesPrinceEdouard = "https://ici.radio-canada.ca/rss/1000814"
+$Region_Manitoba = "https://ici.radio-canada.ca/rss/5775"
+$Region_MauricieCentreQuebec = "https://ici.radio-canada.ca/rss/5777"
+$Region_NordOntario = "https://ici.radio-canada.ca/rss/36518"
+$Region_NouveauBrunswich = "https://ici.radio-canada.ca/rss/5765"
+$Region_NouvelleEcosse = "https://ici.radio-canada.ca/rss/1000813"
+$Region_OttawaGatineau = "https://ici.radio-canada.ca/rss/6102"
+$Region_Quebec = "https://ici.radio-canada.ca/rss/6104"
+$Region_SaguenayLacStJean = "https://ici.radio-canada.ca/rss/6106"
+
+
+if($Informations = "Grands Titres"){$RSS = $Information_GrandsTitres}
+
+
+$RSS_Query = Invoke-RestMethod -Uri $RSS
+
+$RSS_Query | Foreach{
+
+                     $Titre = $_.Title
+                     $Lien = $_.Lien
+
+
+                     }
+
+$texte = invoke-webrequest -uri http://ici.radio-canada.ca/nouvelle/1183688/fausses-nouvelles-trudeau-1-million-immigrants-afrique-asie-cbtv-city-news-canada-tv3
+
+$texte.ParsedHtml
