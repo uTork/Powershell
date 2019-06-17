@@ -1,5 +1,5 @@
 # ![logo][] *is*PowerShell
-[logo]: https://i.ibb.co/3Ty7Z7B/atome1.jpg
+[logo]: https://i.ibb.co/NNTxg57/atome-mauve.jpg
 
 Powershell is a superior multi-platform automation and configuration tool (Windows, Linux and macOS) that works well with your existing tools. It is optimized for processing structured data (JSON, CSV, XML, etc.).
 
