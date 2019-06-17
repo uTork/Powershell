@@ -6,11 +6,11 @@ Powershell is a superior multi-platform automation and configuration tool (Windo
 [logo]: https://raw.githubusercontent.com/PowerShell/PowerShell/master/assets/ps_black_64.svg?sanitize=true
 
 #### The GIT is devoted to examples of powershell scripts and the use of modules.
-**Live Streaming:** [isPowerShell](http://www.facebook.com/ispowershell)
+[isPowerShell Facebook Live Streaming](http://www.facebook.com/ispowershell)
 
-**Youtube Channel:**[isPowershell Channel](https://www.youtube.com/channel/UCMGB_tnUzFgUEZgXMZ37EFg)
+[isPowershell Youtube Channel](https://www.youtube.com/channel/UCMGB_tnUzFgUEZgXMZ37EFg)
 
-**Wiki:** [isPowerShell Wiki (FR/EN)](https://github.com/uTork/PowerShell/wiki)
+[isPowerShell Wiki (FR/EN)](https://github.com/uTork/PowerShell/wiki)
 
 ##### Modules Examples: 
 - Module Active Directory | *Using the module in different Active Directory contexts*
