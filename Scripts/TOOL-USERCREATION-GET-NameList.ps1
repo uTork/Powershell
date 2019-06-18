@@ -20,7 +20,7 @@ https://github.com/uTork/Powershell/
 [string] or [pscustomobject]
 #>
 
-Param([int]$number_of_name)
+Param($number_of_name)
 
 # Surname list from a web site
 $uri = "https://names.mongabay.com/most_common_surnames.htm"
@@ -47,14 +47,14 @@ $firstname_list = $table_firstname -replace $filter
 $surname_count = $surname_list.count
 $firstname_count = $firstname_list.count
 
-$number_of_name = 1..$number_of_name
+
 $array = $null
 
 $array = @(
 "Firstname,surname"
 
 
-$number_of_name | %{
+1..$number_of_name | %{
 
     $random_surname_num = get-random -Maximum $surname_count
 
@@ -71,7 +71,3 @@ $number_of_name | %{
 
 $array | convertfrom-csv
 }
-
-
-
-
