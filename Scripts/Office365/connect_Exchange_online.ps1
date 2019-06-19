@@ -1,5 +1,5 @@
 $user = "sebastien.maltais@octavie.onmicrosoft.com"
-$password = ConvertTo-SecureString "8888Pikachu!" -AsPlainText -Force
+$password = ConvertTo-SecureString "8888Pikac6hu!" -AsPlainText -Force
 $cred= New-Object System.Management.Automation.PSCredential ($user,$password)
 
 
