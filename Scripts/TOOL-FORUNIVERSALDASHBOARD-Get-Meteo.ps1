@@ -1,4 +1,3 @@
-
 function Get-Meteo {
 <#
 .SYNOPSIS
@@ -17,7 +16,7 @@ FaceBook: http://www.facebook.com/isPowerShell
 #>
 param([string]$City)
 
-# ID provided by https://openweathermap.org/api
+# ID provided by https://openweathermap.org/api. You have to request your own to work
 $api_id = "8d409c0358df4b499c119399999f2561"
 
 # query the api
