@@ -1,18 +1,40 @@
 Function Get-RadioCanada {
 
-Param(
-         [ValidateSet('Grands Titres','En Continue')]
-         [string]$Information,
-         [ValidateSet('Alimentation','Art de Vivre','Economie','Environnement','International','Justice et faits divers','Politique','Sante','Science','Techno')]
-         [string]$Thematiques,
-                  [ValidateSet('Grands Titres','Football','Hockey','Olympique','Podium','Soccer','Tennis')]
-         [string]$Sports,
-                  [ValidateSet('Celebrites','Cinema','Grands Titres','Humour','Livres','Musique','Tele')]
-         [string]$Arts,
-                  [ValidateSet('Abitibi-Témiscamingue','Alberta','Bas-Saint-Laurent','Colombie-Britannique','Cote-Nord','Estrie','Gaspesie iles de la Madeleine','Grand Montreal','Grand Nord','ile-du-Prince-Edouard','Manitoba','Mauricie-Centre-du-Quebec','Mauricie-Centre-du-Quebec','Nord Ontario','Nouveau-Brunswick','Nouvelle-Écosse','Ottawa-Gatineau','Quebec','Saskatchewan','Terre-Neuve-et-Labrador','Toronto','Windsor')]
-         [string]$Regions,
-                  [ValidateSet('Archives','Dossiers','Espaces Autochtones','RCI')]
-         [string]$Autres
+<#
+.SYNOPSIS
+Affiche les nouvelles de Radio-Canada
+.DESCRIPTION
+Description | La fonction a été créée pour afficher les nouvelles dans des objets powershell. Elles peuvent être récupérées par Universal Dashboard par exemple pour afficher les nouvelles sur un Dashboard sur des téléviseurs par exemple.
+.PARAMETER Information
+Affiche les informations selon la sélection
+.PARAMETER Thematiques
+Affiche les Thematiques selon la sélection
+.PARAMETER Sports
+Affiche les Sports selon la sélection
+.PARAMETER Arts
+Affiche les Arts selon la sélection
+.PARAMETER Regions
+Affiche les Regions selon la sélection
+.PARAMETER Autres
+Affiche la catégorie Autres selon la sélection
+.PARAMETER HTML
+Affiche les nouvelles sur un résumer en HTML qui s'ouvre dans le navigateur.
+.LINK
+Sebastien Maltais
+sebastien_maltais@hotmail.com
+GIT: https://github.com/uTork/Powershell/
+LinkedIn: https://www.linkedin.com/in/sebastienmaltais/
+#>
+
+Param(   
+         
+         [ValidateSet('Grands Titres','En Continue')][string]$Information,
+         [ValidateSet('Alimentation','Art de Vivre','Economie','Environnement','International','Justice et faits divers','Politique','Sante','Science','Techno')][string]$Thematiques,
+         [ValidateSet('Grands Titres','Football','Hockey','Olympique','Podium','Soccer','Tennis')][string]$Sports,
+         [ValidateSet('Celebrites','Cinema','Grands Titres','Humour','Livres','Musique','Tele')][string]$Arts,
+         [ValidateSet('Abitibi-Témiscamingue','Alberta','Bas-Saint-Laurent','Colombie-Britannique','Cote-Nord','Estrie','Gaspesie iles de la Madeleine','Grand Montreal','Grand Nord','ile-du-Prince-Edouard','Manitoba','Mauricie-Centre-du-Quebec','Mauricie-Centre-du-Quebec','Nord Ontario','Nouveau-Brunswick','Nouvelle-Écosse','Ottawa-Gatineau','Quebec','Saskatchewan','Terre-Neuve-et-Labrador','Toronto','Windsor')][string]$Regions,                  
+         [ValidateSet('Archives','Dossiers','Espaces Autochtones','RCI')][string]$Autres,
+         [switch]$HTML
       )
 
 
@@ -116,21 +138,21 @@ if($Regions -eq "Bas-Saint-Laurent"){$RSS = $Region_BasStLaurent}
 if($Regions -eq "Colombie-Britannique"){$RSS = $Region_ClombieBritanique}
 if($Regions -eq "Cote-Nord"){$RSS = $Region_GrandNord}
 if($Regions -eq "Estrie"){$RSS = $Region_Estrie}
-if($Regions -eq "Gaspesie iles de la Madeleine"){$Region_GaspésieÎlesdelaMadeleine}
-if($Regions -eq "Grand Montreal"){$Region_GrandMontreal}
-if($Regions -eq "Grand Nord"){$Region_GrandNord}
-if($Regions -eq "ile-du-Prince-Edouard"){$Region_IlesPrinceEdouard}
-if($Regions -eq "Manitoba"){$Region_Manitoba}
-if($Regions -eq "Mauricie-Centre-du-Quebec"){$Region_MauricieCentreQuebec}
-if($Regions -eq "Nord de l’Ontario"){$Region_NordOntario}
-if($Regions -eq "Nouveau-Brunswick"){$Region_NouveauBrunswich}
-if($Regions -eq "Nouvelle-Écosse"){$Region_NouvelleEcosse}
-if($Regions -eq "Ottawa-Gatineau"){$Region_OttawaGatineau}
-if($Regions -eq "Quebec"){$Region_Quebec}
-if($Regions -eq "Saskatchewan"){$Region_Saskatchewan}
-if($Regions -eq "Terre-Neuve-et-Labrador"){$Region_TerreNeuveetLabrador}
-if($Regions -eq "Toronto"){$Region_Toronto}
-if($Regions -eq "Windsor"){$Region_Windsor}
+if($Regions -eq "Gaspesie iles de la Madeleine"){$RSS = $Region_GaspésieÎlesdelaMadeleine}
+if($Regions -eq "Grand Montreal"){$RSS = $Region_GrandMontreal}
+if($Regions -eq "Grand Nord"){$RSS = $Region_GrandNord}
+if($Regions -eq "ile-du-Prince-Edouard"){$RSS = $Region_IlesPrinceEdouard}
+if($Regions -eq "Manitoba"){$RSS = $Region_Manitoba}
+if($Regions -eq "Mauricie-Centre-du-Quebec"){$RSS = $Region_MauricieCentreQuebec}
+if($Regions -eq "Nord de l’Ontario"){$RSS = $Region_NordOntario}
+if($Regions -eq "Nouveau-Brunswick"){$RSS = $Region_NouveauBrunswich}
+if($Regions -eq "Nouvelle-Écosse"){$RSS = $Region_NouvelleEcosse}
+if($Regions -eq "Ottawa-Gatineau"){$RSS = $Region_OttawaGatineau}
+if($Regions -eq "Quebec"){$RSS = $Region_Quebec}
+if($Regions -eq "Saskatchewan"){$RSS = $Region_Saskatchewan}
+if($Regions -eq "Terre-Neuve-et-Labrador"){$RSS = $Region_TerreNeuveetLabrador}
+if($Regions -eq "Toronto"){$RSS = $Region_Toronto}
+if($Regions -eq "Windsor"){$RSS = $Region_Windsor}
 
 # Autres
 $Autres_Archives = "https://ici.radio-canada.ca/rss/1000548"
@@ -138,10 +160,10 @@ $Autres_Dossiers = "https://ici.radio-canada.ca/rss/6735"
 $Autres_Espacesautochtones = "https://ici.radio-canada.ca/rss/116435"
 $Autres_RCINET = "http://www.rcinet.ca/fr/feed/rss/"
 
-if($Autres -eq "Archives"){$Autres_Archives}
-if($Autres -eq "Dossiers"){$Autres_Dossiers}
-if($Autres -eq "Espaces Autochtones"){$Autres_Espacesautochtones}
-if($Autres -eq "RCI"){$Autres_RCINET}
+if($Autres -eq "Archives"){$RSS = $Autres_Archives}
+if($Autres -eq "Dossiers"){$RSS = $Autres_Dossiers}
+if($Autres -eq "Espaces Autochtones"){$RSS = $Autres_Espacesautochtones}
+if($Autres -eq "RCI"){$RSS = $Autres_RCINET}
 
 
 # Interoge le Serveur de Radio-Canada
@@ -167,7 +189,42 @@ $RSS_Query = Invoke-RestMethod -Uri $RSS
 
 
 
-                     }
+            }
 
-$nouvelle | FL
+# Affiche en objet            
+if($html -ne $true){$nouvelle}
+
+# Affiche en HTML
+if($html -eq $true){
+$image_rc = "http://generalfusion.com/wp-content/uploads/2016/04/Radio-Canada.jpg"
+
+
+$html_page = "<html>"
+$html_page += '<Head><img src="' + $image_rc + '" alt="' + $image_rc + '" style="width:155px;height:50px;"></head>'
+$html_page += "<body>"
+
+$nouvelle | foreach{
+
+$titre = $_.titre
+$nouvelle = $_.Nouvelle
+$lien = $_.lien
+
+$html_page += '<table style="width:100%">'
+$html_page += "<tr><td><b>Titre: </b>$titre</td></tr>"
+$html_page += "<tr><td><b>Nouvelle: </b>$nouvelle</td></tr>"
+$html_page += '<tr><td><b>Site Radio-Canada: </b><a href="' + $lien + '">Cliquer ICI</a></td></tr>'
+$html_page += "</table>"
+$html_page += "</br>"
+
+}
+
+$html_page += "</body>"
+$html_page += "</html>"
+
+$html_page_file = $env:temp + "\rc_info.html"
+
+$html_page | Set-Content -Path $html_page_file
+
+Start-Process -FilePath $html_page_file
+}
 }
