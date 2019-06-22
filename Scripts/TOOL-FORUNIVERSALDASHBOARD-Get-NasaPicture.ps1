@@ -9,7 +9,7 @@ Open the image in the HTML browser.
 .PARAMETER IMAGEURL
 Show the image url
 .PARAMETER SAVEPATH
-Save the image to folder.
+Save the image in a folder.
 .LINK
 Sebastien Maltais
 sebastien_maltais@hotmail.com
