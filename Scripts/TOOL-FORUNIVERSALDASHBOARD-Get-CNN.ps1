@@ -48,7 +48,7 @@ $image_cnn = "https://seeklogo.com/images/C/CNN-logo-8DA6D1FC28-seeklogo.com.png
 $html_page = "<html>"
 $html_page += '<Head><img src="' + $image_cnn + '" alt="' + $image_cnn + '" style="width:155px;height:70px;"></head>'
 $html_page += "<body>"
-$html_page += "</br>"
+$html_page += "</br></br>"
 
 $cnn_news_object | foreach{
 
