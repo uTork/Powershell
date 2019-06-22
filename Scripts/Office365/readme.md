@@ -22,4 +22,7 @@ Copy local file to remote server by pssession
 ### send_1000_mailmessage.ps1
 Send 1000 email message to each mailbox to create fake email for testing.
 
+### azure_ad_sync.ps1
+Azure Active Directory Sync command
+
 
