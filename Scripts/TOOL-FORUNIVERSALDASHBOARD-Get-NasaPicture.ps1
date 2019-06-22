@@ -33,7 +33,7 @@ $author = $NasaQuery.copyright
 $DateTaken = $NasaQuery.date
 $explanation = $NasaQuery.explanation
 
-# Output the object pciture of the day
+# Output the object picture of the day
 if($savepath -eq "" -and $IMAGE_URL -ne $true -and $html -ne $true){$NasaQuery}
 
 # Save imgage to file on the hardrive
