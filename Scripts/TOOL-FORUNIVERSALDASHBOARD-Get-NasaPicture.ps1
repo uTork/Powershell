@@ -1,7 +1,7 @@
 function Get-NasaPicture {
 <#
 .SYNOPSIS
-Nasa Picture of the DAY
+Nasa Picture of the DAY / Need internet to work
 .DESCRIPTION
 Open the nasa picture of day on html page. Extract url. Save the image to folder
 .PARAMETER HTML
@@ -22,7 +22,7 @@ PARAM(
       [string]$SAVEPATH
       )
 
-# get your personnal free api key on nasa website
+# get your personnal free api key on nasa website https://api.nasa.gov/index.html#apply-for-an-api-key
 $Nasa_API_KEY = "DEMO_KEY"
 
 $nasa = "https://api.nasa.gov/planetary/apod?api_key=$Nasa_API_KEY"
