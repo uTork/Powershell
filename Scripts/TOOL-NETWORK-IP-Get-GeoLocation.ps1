@@ -1,4 +1,4 @@
-function Get-GeoLocation{
+function Get-ipGeoLocation{
 <#
 .SYNOPSIS
 Get geolocation of an ip address
