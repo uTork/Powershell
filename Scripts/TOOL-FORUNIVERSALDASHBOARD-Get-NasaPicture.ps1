@@ -15,6 +15,7 @@ Sebastien Maltais
 sebastien_maltais@hotmail.com
 GIT: https://github.com/uTork/Powershell/
 LinkedIn: https://www.linkedin.com/in/sebastienmaltais/
+FaceBook: http://www.facebook.com/isPowerShell
 #>
 PARAM(
       [switch]$HTML,
