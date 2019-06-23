@@ -7,6 +7,8 @@ This script use the API https://openweathermap.org/api. You have to open a free 
 Developed for use with Universal Dashboard.
 .PARAMETER City
 Enter the name of the city you want and get the meteo information
+.EXAMPLE
+Get-Meteo -City "shipshaw" -ApiKey "8d409c0358df4b499c11931e717f2561"
 .LINK
 Sebastien Maltais
 sebastien_maltais@hotmail.com
@@ -14,15 +16,37 @@ GIT: https://github.com/uTork/Powershell/
 LinkedIn: https://www.linkedin.com/in/sebastienmaltais/
 FaceBook: http://www.facebook.com/isPowerShell
 #>
-param([string]$City)
 
-# ID provided by https://openweathermap.org/api. You have to request your own to work
-$api_id = "8d409c0358df4b499c119399999f2561"
+[CmdletBinding()]
 
-# query the api
-$query = "http://api.openweathermap.org/data/2.5/weather?q=$city&APPID=$api_id"
+param([string]$City,
+      [string]$ApiKey
 
-$meteo = try{Invoke-RestMethod $query -ErrorAction Stop}catch{$message = "City not found";Write-host $message;break}
+
+)
+
+
+
+# API URL
+$query = "http://api.openweathermap.org/data/2.5/weather?q=$city&APPID=$ApiKey"
+
+# Query Open Weather Map
+$meteo = try{Invoke-RestMethod $query -ErrorAction Stop}catch{
+                                                              $ErrorMessage = $_.ErrorDetails.message
+                                                             
+                                                              if($ErrorMessage -like "*API key*"){
+                                                                                                   clear
+                                                                                                   $message = "The API Key is invalid. Go to http://openweathermap.org and register to get your free API KEY"
+                                                                                                   write-host $message -ForegroundColor Red
+                                                                                                   break 
+                                                                                                   }
+                                                              if($ErrorMessage -like "*City*"){
+                                                                                                   clear
+                                                                                                   $message = 'City not found | Example: Get-Meteo -City "shipshaw" -Api_Key "8d409c0358df4b499c119399999f2561"'
+                                                                                                   write-host $message -ForegroundColor Red
+                                                                                                   break 
+                                                                                                   }
+                                                             }
 
 # Current temp
 [string]$current_temp =  [math]::Round($meteo.main.temp /10)
