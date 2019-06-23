@@ -19,11 +19,10 @@ FaceBook: http://www.facebook.com/isPowerShell
 
 [CmdletBinding()]
 
-param([string]$City,
+param(
+      [string]$City,
       [string]$ApiKey
-
-
-)
+      )
 
 
 
