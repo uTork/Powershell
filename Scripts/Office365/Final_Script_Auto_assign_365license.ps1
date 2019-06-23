@@ -32,7 +32,7 @@ $Director_license_count = Get-MsolAccountSku | Where-object {$_.accountskuid -eq
 # Manager Staff license
 $Manager_license_name = "octavie:Manager"
 $Manager_license = Get-MsolAccountSku | Where-object {$_.accountskuid -eq $Manager_license_name} | Select-Object -ExpandProperty accountskuid
-$Director_license_count = Get-MsolAccountSku | Where-object {$_.accountskuid -eq $Manager_license_name} | Select-Object -ExpandProperty ConsumedUnits
+$Manager_license_count = Get-MsolAccountSku | Where-object {$_.accountskuid -eq $Manager_license_name} | Select-Object -ExpandProperty ConsumedUnits
 
 # Grocery Staff membership
 $groupmember_Grocery = Get-ADGroup -Identity "Grocery_Staff" | Get-ADGroupMember
