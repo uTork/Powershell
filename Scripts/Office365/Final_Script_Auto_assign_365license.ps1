@@ -12,7 +12,7 @@ $country = "CA"
 
 # Connection to Office 365 MsOnline Service
 $user = "sebastien.maltais@octavie.onmicrosoft.com"
-$password = ConvertTo-SecureString "Tondeuse2011!" -AsPlainText -Force
+$password = ConvertTo-SecureString "Tondeus2011!" -AsPlainText -Force
 $cred= New-Object System.Management.Automation.PSCredential ($user,$password)
 Connect-MsolService -Credential $cred
 
