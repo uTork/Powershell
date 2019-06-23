@@ -8,7 +8,7 @@ Use the free api from IPSTACK to resolve the location of ip address
 The ip address to resolve.
 .PARAMETER APIKEY
  FREE API Key from IPSTACK https://ipstack.com/product
-.isPowershell
+.PARAMETER isPowershell
 Open the isPowerShell Wiki with example on the function
 .LINK
 Sebastien Maltais
