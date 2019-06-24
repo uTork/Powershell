@@ -4,7 +4,7 @@
 
 # Mail Setup for SMTP anonymous
 $smtp_server = "smtp.videotron.ca"
-$from = "licence_365@ispowershell.net"
+$from = "license_365@ispowershell.net"
 $to = "sebastien_maltais@hotmail.com"
 
 # Connection to Office 365 MsOnline Service / Office 365 credential
