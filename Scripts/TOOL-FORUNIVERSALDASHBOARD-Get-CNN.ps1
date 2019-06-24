@@ -46,21 +46,31 @@ $cnn_news = Invoke-RestMethod -uri $cnn."$Category"
 
 $cnn_news_object =  $cnn_news | foreach{
                     $title = ($_ | select-object -ExpandProperty title)."#cdata-section"
+                    if($title -eq $null){$title = $_.title}
                     $Description = $_.description
-                    $pos = $Description.IndexOf('<div class="feedflare">')
-                    $Description = $Description.Substring(0, $pos)
+
+                            if($description -like '*<div class="feedflare">*'){
+                                $pos = $Description.IndexOf('<div class="feedflare">')
+                                $Description = $Description.Substring(0, $pos)
+                                }
+                            if($description -like '*<img src*'){
+                                $pos2 = $Description.IndexOf('<img src=')
+                                $Description = $Description.Substring(0, $pos2)
+                                }
+
                     $link = $_.origLink
 
-                     $obj = New-Object PSObject
-                     $obj | Add-Member -type NoteProperty -Name 'Title' -Value $title
-                     $obj | Add-Member -type NoteProperty -Name 'News' -Value $Description
-                     $obj | Add-Member -type NoteProperty -Name 'Link' -Value $link
-                     $obj                   
+                    [pscustomobject]@{
+                                       Title = $title
+                                       News = $Description
+                                       Link = $link
+                                      }                  
                     }
 
 
 # Show news objects            
 if($html -ne $true){$cnn_news_object}
+
 
 # Show News in HTML
 if($html -eq $true){
@@ -97,3 +107,4 @@ $html_page | Set-Content -Path $html_page_file
 Start-Process -FilePath $html_page_file
 }
 }
+
