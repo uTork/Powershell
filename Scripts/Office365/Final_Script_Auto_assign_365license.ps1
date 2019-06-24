@@ -1,6 +1,6 @@
-# This script is created ti assign 3 different type of license and assign them by Ad group.
-# You place this script in planified task and run the task at each hour 7/7 24/24
-# This script use module MSOnline and Active Directory
+# This script is created to assign 3 differents type of license and assign them by Active Directory group.
+# You place this script in planified task and run it at each hour 7/7 24/24
+# This script use module MSOnline and Active Directory module
 
 # Mail Setup for SMTP anonymous
 $smtp_server = "smtp.videotron.ca"
