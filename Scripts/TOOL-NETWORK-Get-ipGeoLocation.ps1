@@ -31,8 +31,6 @@ if($isPowerShell -eq $true){start-process "https://github.com/uTork/Powershell/w
 $api = "http://api.ipstack.com/" + $ip + "?access_key=$APIKEY"
 
 # Query IPSTACK server
-$query = Invoke-RestMethod -Uri $api
+Invoke-RestMethod -Uri $api
 
-# output the object ip location
-$query
 }
