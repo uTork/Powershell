@@ -20,7 +20,8 @@ FaceBook: http://www.facebook.com/isPowerShell
 
 [CmdletBinding()]
 
-param([string]$IP,
+param(
+      [string]$IP,
       [string]$APIKEY,
       [switch]$isPowerShell
      )
@@ -32,5 +33,4 @@ $api = "http://api.ipstack.com/" + $ip + "?access_key=$APIKEY"
 
 # Query IPSTACK server
 Invoke-RestMethod -Uri $api
-
 }
