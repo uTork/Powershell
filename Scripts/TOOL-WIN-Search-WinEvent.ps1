@@ -1,4 +1,3 @@
-
 function Search-WinEvent {
 <#
 .SYNOPSIS
