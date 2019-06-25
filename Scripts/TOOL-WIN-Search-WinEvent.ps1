@@ -11,14 +11,12 @@ The name of the log you want to query. Ex: "application" or "Windows Networking 
 Select all windows event log (replace the EventLog parameter. Take long time to analyze.
 .PARAMETER EventLevel
 The level of the events you want to query.
-
 Value:
       "critical"
       "error"
       "Warning"
       "Informational"
       "Verbose"
-
 .PARAMETER ID
 The event id you want to search.
 .PARAMETER HTML
@@ -52,44 +50,43 @@ Search event "101" in the EventLog "Microsoft-Client-Licensing-Platform/Admin" a
 Search-WinEvent -EventLog "Microsoft-Client-Licensing-Platform/Admin" -EventLevel "information" -id "101" -html -SmtpServer "smtp.example.com" -MailFrom "report@ispowershell.com" -MailTo "sebastien_maltais@hotmail.com"
 .EXAMPLE
 Generate a report from a list of server to find the same id in the same source
-
-$Server_list = @("Server01"
+$Server_list = @(
+                 "Server01"
                  "Server12"
                  "Server55"
                  "Server43"
                  "workstation1"
                  "Server05"
                  )
-
 $server_list | foreach{Search-WinEvent -computername $_ -EventLog "Microsoft-Client-Licensing-Platform/Admin" -EventLevel "information" -id "101" -html -SmtpServer "smtp.videotron.ca" -MailFrom "report@ispowershell.com" -MailTo "recipient@hotmail.com"}
-
 .LINK
 Sebastien Maltais
 sebastien_maltais@hotmail.com
 GIT: https://github.com/uTork/Powershell/
 LinkedIn: https://www.linkedin.com/in/sebastienmaltais/
+FaceBook: http://www.facebook.com/isPowerShell
 #>
 
 
 
 param(
-         [string]$ComputerName,
-         [string]$EventLog,
-         [switch]$ALL,
-         [string]$ID,
-         [ValidateSet('Critical','Error','Warning','Informational','Verbose')]
-         [string]$EventLevel,
-         [switch]$Html,
-         [string]$SmtpServer,
-         [string]$SmtpUser,
-         [string]$SmtpPassword,
-         [int]$port,
-         [string]$MailFrom,
-         [string]$MailTo
+         [Parameter(Position=0,mandatory=$false)][string]$ComputerName,
+         [Parameter(Position=1,mandatory=$false)][string]$EventLog,
+         [Parameter(Position=2,mandatory=$false)][switch]$ALL,
+         [Parameter(Position=3,mandatory=$false)][string]$ID,
+         [Parameter(Position=4,mandatory=$true)][ValidateSet('Critical','Error','Warning','Informational','Verbose')][string]$EventLevel,
+         [Parameter(Position=5,mandatory=$false)][switch]$Html,
+         [Parameter(Position=6,mandatory=$false)][string]$SmtpServer,
+         [Parameter(Position=7,mandatory=$false)][string]$SmtpUser,
+         [Parameter(Position=8,mandatory=$false)][string]$SmtpPassword,
+         [Parameter(Position=9,mandatory=$false)][int]$port,
+         [Parameter(Position=10,mandatory=$false)][string]$MailFrom,
+         [Parameter(Position=11,mandatory=$false)][string]$MailTo
     )
 
 # Translate the level to french if the Windows is in french langage
 $cult = (get-culture).name
+
 if($cult -like "*FR*"){
                       if($EventLevel -eq "critical"){[string]$EventLevel = "Critique"}
                       if($EventLevel -eq "error"){[string]$EventLevel = "Erreur"}
@@ -97,6 +94,7 @@ if($cult -like "*FR*"){
                       if($EventLevel -eq "Informational"){[string]$EventLevel = "Information"}
                       if($EventLevel -eq "Verbose"){[string]$EventLevel = "Commentaires"}
                       }
+
 # Set Localhost as default computername
 if($ComputerName -eq ""){$ComputerName = "localhost"}                      
 
@@ -106,26 +104,14 @@ if($port -eq ""){$port ="25"}
 # EventLog Full list if siwtch -ALL is on
 if($all -eq $true){[array]$EventLog = (Get-WinEvent -ListLog * -force -ErrorAction SilentlyContinue).LogName}
 
-# Set script scope variable
-$script:EventLevel = $EventLevel
-$script:id = $id
-$script:computername = $ComputerName
-$script:SmtpServer = $SmtpServer
-$script:port = $port
-[string]$script:from_mail = $MailFrom
-[string]$script:mailrecipient = $MailTo
-$script:SmtpPassword = $SmtpPassword
-$script:SmtpUser = $SmtpUser
-$script:HTML = $html
-
 
 $event_list = @(
                  $EventLog  | foreach{
                                      $log_name = $_ 
                                      
-                                     if($script:id -eq "" -and $script:EventLevel -ne ""){try{Get-WinEvent -ComputerName $script:computername -LogName $log_name -Erroraction Stop | where-object {$_.leveldisplayname -eq $script:EventLevel}}catch{$event = $null}}
-                                     if($script:id -ne "" -and $script:EventLevel -eq ""){try{Get-WinEvent -ComputerName $script:computername -LogName $log_name -Erroraction Stop | where-object {$_.id -eq $script:id}}catch{$event = $null}}
-                                     if($script:id -ne "" -and $script:EventLevel -ne ""){try{Get-WinEvent -ComputerName $script:computername -LogName $log_name -Erroraction Stop | where-object {$_.leveldisplayname -eq $script:EventLevel -and $_.id -eq $script:id}}catch{$event = $null}}
+                                     if($id -eq "" -and $EventLevel -ne ""){try{Get-WinEvent -ComputerName $computername -LogName $log_name -Erroraction Stop | where-object {$_.leveldisplayname -eq $EventLevel}}catch{$event = $null}}
+                                     if($id -ne "" -and $EventLevel -eq ""){try{Get-WinEvent -ComputerName $computername -LogName $log_name -Erroraction Stop | where-object {$_.id -eq $id}}catch{$event = $null}}
+                                     if($id -ne "" -and $EventLevel -ne ""){try{Get-WinEvent -ComputerName $computername -LogName $log_name -Erroraction Stop | where-object {$_.leveldisplayname -eq $EventLevel -and $_.id -eq $id}}catch{$event = $null}}
                                     }
                 )
 
@@ -133,7 +119,7 @@ $event_list = @(
 $event_group = $event_list | sort ProviderName | Group-object id, Providername
 
 # PS object Creation from the last event of the set
-$script:event_Filtered = @(
+$event_Filtered = @(
                     $event_group | foreach{
                                           $gr = $_.group | sort TimeCreated
                                           $event = $gr | Select-Object -Last 1
@@ -159,7 +145,7 @@ $script:event_Filtered = @(
 
 
 # Generate HTML report in temp directory
-if($script:HTML -eq $true){
+if($HTML -eq $true){
 
 # Date for HTML Report 
 $date_html = (get-date).DateTime
@@ -168,7 +154,7 @@ $date_html = (get-date).DateTime
 $html_report = @(
                 "<html>"
                 "<head>"
-                '<H2>Windows Events | <font color="#3399ff">HTML Report</font> | VM/Server: <font color="#3399ff">' + $script:computername + '</font> | Date: <font color="#3399ff">' + $date_html + '</font></H2>'
+                '<H2>Windows Events | <font color="#3399ff">HTML Report</font> | VM/Server: <font color="#3399ff">' + $computername + '</font> | Date: <font color="#3399ff">' + $date_html + '</font></H2>'
                 "<style>"
                 'table {table-layout:fixed;width:auto;white-space:nowrap;}'
                 'th, td {border: 1px solid black;padding: 8px;white-space: nowrap;max-width:100%;}'       
@@ -188,7 +174,7 @@ $html_report += @(
                 
 # Table Row Creation
 $html_report += @(
-                    $script:event_Filtered | foreach{
+                    $event_Filtered | foreach{
                                               $timecreated = $_.timecreated
                                               $provider = $_.ProviderName
                                               $event_id = $_.id
@@ -216,30 +202,30 @@ $html_report += @(
                  )
 
 # HTML File Creation
-$script:html_path = $env:temp + "\report_search-winevent.html"
-$HTML_REPORT | SET-CONTENT -Path $script:html_path
+$html_path = $env:temp + "\report_search-winevent.html"
+$HTML_REPORT | SET-CONTENT -Path $html_path
 
 # Launch the web browser with the HTML Report
-if($script:SmtpServer -eq ""){start-process -FilePath $script:html_path}
+if($SmtpServer -eq ""){start-process -FilePath $html_path}
 }
 
 # CSV/TEXT Report path for the mail attachement 
-$script:csv_path = $env:temp + "\report_search-winevent.csv"
+$csv_path = $env:temp + "\report_search-winevent.csv"
 
 # Output the report to the console
-if($script:HTML -ne $true -and $script:SmtpServer -eq ""){$script:event_Filtered | Format-table}
+if($HTML -ne $true -and $SmtpServer -eq ""){$event_Filtered | Format-table}
 
 # Set the Body of the email with the text report for the mail attachement                   
-If($script:HTML -ne $true -and $script:SmtpServer -ne ""){$script:event_Filtered | Export-csv -NoTypeInformation -Encoding UTF8 -Delimiter "|" -Path $script:csv_path} 
+If($HTML -ne $true -and $SmtpServer -ne ""){$event_Filtered | Export-csv -NoTypeInformation -Encoding UTF8 -Delimiter "|" -Path $csv_path} 
 
 # Send report by mail
 
-if($script:SmtpServer -ne ""){
+if($SmtpServer -ne ""){
 
     $date_mail = (get-date).DateTime
-    $subject = "WinEvent Report of the Computer: $script:computername | $date_mail"
+    $subject = "WinEvent Report of the Computer: $computername | $date_mail"
     $credential = $null
-    if($script:HTML -eq $true){$attachement = $script:html_path}else{$attachement = $script:csv_path}
+    if($HTML -eq $true){$attachement = $html_path}else{$attachement = $csv_path}
 
     # Body of the mail ...simple
     [string]$html_body = @(
@@ -258,20 +244,19 @@ if($script:SmtpServer -ne ""){
 
 
     #SMTP Server credential user/pass
-    if($script:SmtpUser -ne "" -and $script:SmtpPassword -ne ""){
-                                                                $script:SmtpPassword = ConvertTo-SecureString $script:SmtpPassword -AsPlainText -Force                                                 
-                                                                $credential = New-Object -typename System.Management.Automation.PSCredential -argumentlist $script:SmtpUser, $script:SmtpPassword
-                                                                }
+    if($SmtpUser -ne "" -and $SmtpPassword -ne ""){
+                                                   $SmtpPassword = ConvertTo-SecureString $SmtpPassword -AsPlainText -Force                                                 
+                                                   $credential = New-Object -typename System.Management.Automation.PSCredential -argumentlist $SmtpUser, $SmtpPassword
+                                                   }
     # Smtp anonymous
     if($credential -eq $null){
-                              try{Send-mailmessage -from $script:from_mail -To $script:mailrecipient -Port $script:port -Body $html_body -Subject $subject -Attachments $attachement -SmtpServer $script:SmtpServer -Encoding UTF8 -BodyAsHtml -ErrorAction stop}catch{$smtp_error = "SMTP Transport failure. Please try again";write-output $smtp_error}
+                              try{Send-mailmessage -from $mailfrom -To $mailto -Port $port -Body $html_body -Subject $subject -Attachments $attachement -SmtpServer $SmtpServer -Encoding UTF8 -BodyAsHtml -ErrorAction stop}catch{$smtp_error = "SMTP Transport failure. Please try again";write-output $smtp_error}
                              }
     # Smtp with Authentification
     if($credential -ne $null){
-                              try{Send-mailmessage -from $script:from_mail -To $script:mailrecipient -Port $script:port -Credential $credential  -Body $html_body -Attachments $attachement -Subject $subject -SmtpServer $script:SmtpServer -BodyAsHtml -ErrorAction stop}catch{$smtp_error = "SMTP Transport failure. Please try again";write-output $smtp_error}
+                              try{Send-mailmessage -from $mailfrom -To $mailto -Port $port -Credential $credential  -Body $html_body -Attachments $attachement -Subject $subject -SmtpServer $SmtpServer -BodyAsHtml -ErrorAction stop}catch{$smtp_error = "SMTP Transport failure. Please try again";write-output $smtp_error}
                              }
 
 
 }
 }
-
