@@ -1,8 +1,27 @@
-$hyperv_host_list = get-vm -computername $env:computername
+$srv_list = @(
+"srv1"
+"srv2"
+"hyperv-srv-1"
+)
+
+
+
+$password = ConvertTo-SecureString "DindonUltra" -AsPlainText -Force
+$cred = New-Object System.Management.Automation.PSCredential ("Administrator",$password)
+
+
+foreach($srv in $srv_list){
+Enter-PSSession -ComputerName $srv -Credential $cred
+
+start-sleep -Seconds 1
+
+
+$hyperv_host_list = get-vm
 
 $vm_details = foreach($vm in $hyperv_host_list){
 
-        $vmname = $vm.ComputerName
+
+        $vmname = $vm.name
         $disk = $vm.HardDrives
         $disk_n = $disk.count
         [string]$memory = $vm.MemoryStartup /1gb
@@ -58,6 +77,14 @@ $vm_details = foreach($vm in $hyperv_host_list){
         # Host CPU Count
         $vmhost_processor = $vmhost.LogicalProcessorCount
 
+        # Host DISK Disk Time
+        #Get-counter -ListSet * | where-object {$_.countersetname -eq "logicaldisk"} | select-object -ExpandProperty counter
+
+        $disk_time = (get-counter -Counter "\logicaldisk(_total)\% disk time" | select-object -ExpandProperty CounterSamples).cookedvalue
+        $disk_time = [math]::Round([string]$disk_time)
+        $disk_time = [string]$disk_time + "%"
+
+
         # host Free memory
         $host_free_memory = (get-counter -Counter "\Memory\Available Bytes" | select-object -ExpandProperty CounterSamples).cookedvalue
         $host_free_memory = $host_free_memory /1gb
@@ -84,6 +111,7 @@ $vm_details = foreach($vm in $hyperv_host_list){
                     "Hyper-V Host Free Memory" = $host_free_memory
                     "Hyper-V Host Maximum Memory" = $vmhost_memory
                     "Hyper-V Host processor" = $host_cpu
+                    "Disk Utilisation Time" = $disk_time
                     "Hyper-V Host Disk Free space" = $disk_size
 
                    }
@@ -94,11 +122,19 @@ $txt = $env:computername + ".txt"
 
 $savepath = "c:\windows\temp\$txt"
 
-$vm_details | export-csv -path $savepath -NoTypeInformation -Encoding UTF8
+$vm_details | export-csv -path $savepath -NoTypeInformation -Encoding UTF8 -Force
 
-$txt = $env:computername + ".txt"
 
-$share = "\\10.0.0.1\share"
-$remotec = "\\$env:computername\C$\windows\temp\$txt"
+Exit-PSSession
 
-Copy-Item -Path $savepath -Destination $share -Force
+$txt = $srv + ".txt"
+
+$share = "\\10.0.0.5\s"
+$remotec = "\\$srv\C$\windows\temp\$txt"
+
+Copy-Item -Path $remotec -Destination $share -Force
+}
+
+
+
+
