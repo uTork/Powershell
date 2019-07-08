@@ -5,7 +5,7 @@ $srv_list = @(
 )
 
 
-$password = ConvertTo-SecureString "1978Shipshaw" -AsPlainText -Force
+$password = ConvertTo-SecureString "Turbo!!!" -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential ("sebastienm",$password)
 
 
