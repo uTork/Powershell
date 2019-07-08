@@ -6,7 +6,7 @@ $srv_list = @(
 
 
 $password = ConvertTo-SecureString "Turbo!!!" -AsPlainText -Force
-$cred = New-Object System.Management.Automation.PSCredential ("sebastienq",$password)
+$cred = New-Object System.Management.Automation.PSCredential ("sebast1enq",$password)
 
 
 foreach($srv in $srv_list){
