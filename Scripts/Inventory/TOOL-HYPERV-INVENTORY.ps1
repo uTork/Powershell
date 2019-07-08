@@ -5,15 +5,14 @@ $srv_list = @(
 )
 
 
-
-$password = ConvertTo-SecureString "DindonUltra" -AsPlainText -Force
-$cred = New-Object System.Management.Automation.PSCredential ("Administrator",$password)
+$password = ConvertTo-SecureString "1978Shipshaw" -AsPlainText -Force
+$cred = New-Object System.Management.Automation.PSCredential ("sebastienm",$password)
 
 
 foreach($srv in $srv_list){
 Enter-PSSession -ComputerName $srv -Credential $cred
 
-start-sleep -Seconds 1
+start-sleep -Seconds 5
 
 
 $hyperv_host_list = get-vm
@@ -32,13 +31,13 @@ $vm_details = foreach($vm in $hyperv_host_list){
         [string]$vm_ip = $vm_ip -join " "
 
 
-        $vhdsize = 0
+        [int]$vhdsize = 0
 
         
         $disk | foreach{
                             $vhd = get-vhd -Path $_.path
-                            $size = $vhd.Size
-                            $vhdsize += $vhdsize + $size
+                            [int]$size = $vhd.Size
+                            [int]$vhdsize += $vhdsize + $size
                         }
 
         $vhdsize = [string]$vhdsize
@@ -118,22 +117,29 @@ $vm_details = foreach($vm in $hyperv_host_list){
 
         }
 
-$txt = $env:computername + ".txt"
+
+$txt = $env:computername + "_.txt"
 
 $savepath = "c:\windows\temp\$txt"
 
-$vm_details | export-csv -path $savepath -NoTypeInformation -Encoding UTF8 -Force
+Remove-Item -path $savepath -Force
+
+
+$vm_details | export-csv -path $savepath -Delimiter "|" -NoTypeInformation -Encoding UTF8 -Force
 
 
 Exit-PSSession
 
-$txt = $srv + ".txt"
+start-sleep -Seconds 5
 
-$share = "\\10.0.0.5\s"
+$txt = $srv + "_.txt"
+
+$share = "\\10.2.2.2\s"
 $remotec = "\\$srv\C$\windows\temp\$txt"
 
 Copy-Item -Path $remotec -Destination $share -Force
 }
+
 
 
 
