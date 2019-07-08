@@ -10,10 +10,8 @@ $cred = New-Object System.Management.Automation.PSCredential ("sebastienq",$pass
 
 
 foreach($srv in $srv_list){
+
 Enter-PSSession -ComputerName $srv -Credential $cred
-
-start-sleep -Seconds 5
-
 
 $hyperv_host_list = get-vm
 
@@ -130,7 +128,6 @@ $vm_details | export-csv -path $savepath -Delimiter "|" -NoTypeInformation -Enco
 
 Exit-PSSession
 
-start-sleep -Seconds 5
 
 $txt = $srv + "_.txt"
 
