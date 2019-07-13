@@ -40,11 +40,9 @@ Param(
 
 # wiki ispowershell
 if($isPowershell -eq $true){
-
                             $wiki = "https://github.com/uTork/Powershell/wiki/Function-%7C-Get-RadioCanada"
                             Start-Process $wiki
                             break
-
                             }
 
 # Informations
@@ -55,7 +53,6 @@ $informations_list = [pscustomobject]@{
 
 # Thematique
 $Thematiques_list = [pscustomobject]@{
-
                                         "Alimentation" = "https://ici.radio-canada.ca/rss/7239"
                                         "Art de Vivre" = "https://ici.radio-canada.ca/rss/4163"
                                         "Economie" = "https://ici.radio-canada.ca/rss/5717"
@@ -66,7 +63,7 @@ $Thematiques_list = [pscustomobject]@{
                                         "Sante" = "https://ici.radio-canada.ca/rss/4175"
                                         "Science" = "https://ici.radio-canada.ca/rss/4165"
                                         "Techno" = "https://ici.radio-canada.ca/rss/4169"
-}
+                                      }
 
 # Sport RSS FEED list
 $Sports_list = [pscustomobject]@{
@@ -78,12 +75,10 @@ $Sports_list = [pscustomobject]@{
                                 "Podium" = "https://ici.radio-canada.ca/rss/555082"
                                 "Soccer" = "https://ici.radio-canada.ca/rss/1000058"
                                 "Tennis" = "https://ici.radio-canada.ca/rss/1000059"
-
                                 }
 
 # Arts list
 $Arts_list = [pscustomobject]@{
-
                                 Celebrites = "https://ici.radio-canada.ca/rss/1000232"
                                 Cinema = "https://ici.radio-canada.ca/rss/1000229"
                                 "Grands Titres" = "https://ici.radio-canada.ca/rss/4167"
@@ -91,12 +86,10 @@ $Arts_list = [pscustomobject]@{
                                 Livres = "https://ici.radio-canada.ca/rss/1000083"
                                 Musique = "https://ici.radio-canada.ca/rss/1000230"
                                 Tele = "https://ici.radio-canada.ca/rss/1000233"
-
                                 }
 
 # Regions list
 $regions_list = [pscustomobject]@{
-
                                     'Abitibi-Témiscamingue' = "https://ici.radio-canada.ca/rss/5763"
                                     Alberta = "https://ici.radio-canada.ca/rss/5767"
                                     'Bas-Saint-Laurent' = "https://ici.radio-canada.ca/rss/35004"
@@ -119,35 +112,27 @@ $regions_list = [pscustomobject]@{
                                     'Terre-Neuve et Labrador' = "https://ici.radio-canada.ca/rss/1000815"
                                     Toronto = "https://ici.radio-canada.ca/rss/5779"
                                     Windsor = "https://ici.radio-canada.ca/rss/475289"
-
                                   }
 
 
 # Autres RSS FEED List
 $autres_list = [pscustomobject]@{
-
                                 Archives = "https://ici.radio-canada.ca/rss/1000548"
                                 Dossiers = "https://ici.radio-canada.ca/rss/6735"
                                 "Espaces Autochtones" = "https://ici.radio-canada.ca/rss/116435"
                                 RCINET = "http://www.rcinet.ca/fr/feed/rss/"
-
                                 }
            
 # Sélection de l'information
 if($Information -ne ""){$RSS = $informations_list | select-object -ExpandProperty $Information }
-
 # Sélection sports
 if($Sports -ne ""){$RSS = $Sports_list | select-object -ExpandProperty $Sports}
-
 # Sélection des thématiques
 if($Thematiques -ne ""){$RSS = $Thematiques_list | select-object -ExpandProperty $Thematiques}
-
 # Selection des Arts
 if($Arts -ne ""){$RSS = $Arts_list | select-object -ExpandProperty $Arts}
-
 # Selection Regions
 if($Regions -ne ""){$RSS = $regions_list | select-object -ExpandProperty $Regions}
-
 # Selection Autres
 if($Autres -ne ""){$RSS = $Autres_list | select-object -ExpandProperty $Autres}
 
@@ -169,8 +154,8 @@ $RSS_Query = Invoke-RestMethod -Uri $RSS
                                         'Nouvelle' = $Description
                                         'Lien' = $lien
                                        }
-                }
-                )
+                                       }
+                    )
 
 # Affiche en objet            
 if($html -ne $true){$nouvelle}
