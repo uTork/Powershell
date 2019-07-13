@@ -4,19 +4,13 @@ Function Get-CBCNews {
 .SYNOPSIS
 Show CBC News
 .DESCRIPTION
-Description | La fonction a été créée pour afficher les nouvelles dans des objets powershell. Elles peuvent être récupérées par Universal Dashboard par exemple pour afficher les nouvelles sur un Dashboard sur des téléviseurs par exemple.
-.PARAMETER Information
-Affiche les informations selon la sélection
-.PARAMETER Thematiques
-Affiche les Thematiques selon la sélection
-.PARAMETER Sports
-Affiche les Sports selon la sélection
-.PARAMETER Arts
-Affiche les Arts selon la sélection
-.PARAMETER Regions
-Affiche les Regions selon la sélection
-.PARAMETER Autres
-Affiche la catégorie Autres selon la sélection
+Transform the RSS NEWS FEED from CBC into object or html
+.PARAMETER $GENERAL_NEWS
+Show general news
+.PARAMETER SPORTS_NEWS
+Show sport news
+.PARAMETER REGIONAL_NEWS
+Show Regional News
 .PARAMETER HTML
 Affiche les nouvelles sur un résumer en HTML qui s'ouvre dans le navigateur.
 .LINK
@@ -32,12 +26,17 @@ Param(
          [ValidateSet('Sports','MLB','NBA','Curling','CFL','NFL','NHL','Soccer','Figure_Skating')][string]$SPORTS_NEWS,
          [ValidateSet("British_Columbia","Kamloops","Calgary",'Edmonton','Saskatchewan','Saskatoon','Manitoba','Thunder_Bay',"Sudbury",'Windsor',"London","Kitchener_Waterloo","Toronto","Hamilton","Montreal","New_Brunswick",'Prince_Edward_Island','Nova_Scotia','Newfoundland_and_Labrador',"North")][string]$REGIONAL_NEWS,
          [ValidateSet('In_Depth_Reports')][string]$THE_NATIONAL,
-         [switch]$HTML
+         [switch]$HTML,
+         [switch]$isPowershell
       )
 
+# Show news objects
+$wiki = "https://github.com/uTork/Powershell/wiki/Function:-Get-CBCNews"          
+if($ispowershell -eq $true){Start-Process $wiki;break}
 
 
 
+# General News RSS address
 $GENERALNEWS = @{
                     Top_Stories	= "https://rss.cbc.ca/lineup/topstories.xml"
                     World = "https://rss.cbc.ca/lineup/world.xml"
@@ -45,18 +44,13 @@ $GENERALNEWS = @{
                     Politics = "https://rss.cbc.ca/lineup/politics.xml"
                     Business = "https://rss.cbc.ca/lineup/business.xml"
                     Health = "https://rss.cbc.ca/lineup/health.xml"
-                    "Arts_and_Entertainment" = "https://rss.cbc.ca/lineup/arts.xml"
-                    "Technology_and_Science" = "https://rss.cbc.ca/lineup/technology.xml"
+                    Arts_and_Entertainment = "https://rss.cbc.ca/lineup/arts.xml"
+                    Technology_and_Science = "https://rss.cbc.ca/lineup/technology.xml"
                     Offbeat = "https://rss.cbc.ca/lineup/offbeat.xml"
                     Indigenous = "https://www.cbc.ca/cmlink/rss-cbcaboriginal"
-}
+                 }
 
-if($GENERAL_NEWS -eq $true){
-                            $RSS = $GENERALNEWS."$GENERAL_NEWS"
-                            }                  
-
-
-
+# Sport News RSS Address           
 $SPORTSNEWS = @{
 
                     Sports = "https://rss.cbc.ca/lineup/sports.xml"
@@ -69,14 +63,10 @@ $SPORTSNEWS = @{
                     Soccer = "https://rss.cbc.ca/lineup/sports-soccer.xml"
                     Figure_Skating = "https://rss.cbc.ca/lineup/sports-figureskating.xml"
 
-                }
+                }                  
 
-if($SPORTS_NEWS -eq $true){
-                            $RSS = $SPORTSNEWS."$GENERAL_NEWS"
-                            }        
-                    
-
-$REGIONAL_NEWS = @{
+# Regional News RSS Address
+$REGIONALNEWS = @{
 
                     British_Columbia = "https://rss.cbc.ca/lineup/canada-britishcolumbia.xml"
                     Kamloops = "https://rss.cbc.ca/lineup/canada-kamloops.xml"
@@ -101,23 +91,93 @@ $REGIONAL_NEWS = @{
 
                     }
 
-
-if($REGIONAL_NEWS -eq $true){
-                        
-                        $RSS = $REGIONALNEWS."$REGIONAL_NEWS"
-
-                            }
-
+# The Nationnal News RSS address
 $THENATIONAL = @{
                     In_Depth_Reports = "https://rss.cbc.ca/lineup/thenational.xml"
                  }
 
-if($THE_NATIONAL -eq $true){
+# Select General RSS news FEED
+if($GENERAL_NEWS -NE ""){
+                         $RSS = $GENERALNEWS."$GENERAL_NEWS"                          
+                        }
 
-                            $RSS = $THENATIONAL."$THE_NATIONAL"
+# Select Regional RSS news FEED
+if($REGIONAL_NEWS -ne ""){                       
+                         $RSS = $REGIONALNEWS."$REGIONAL_NEWS"
+                         }
+
+# Select Nationnal RSS news FEED
+if($THE_NATIONAL -ne ""){
+                        $RSS = $THENATIONAL."$THE_NATIONAL"
+                        }
+
+
+
+# Query CBC News FEED server
+$RSS_Query = Invoke-RestMethod -Uri "https://rss.cbc.ca/lineup/canada-thunderbay.xml" -UseBasicParsing
+
+# Create News Array from RSS_Query
+[array]$news = @( 
+
+                     $RSS_Query | foreach{
+
+                     $title = $_.title | select-object -ExpandProperty "#cdata-section"
+                     #[string]$title = $title | select-object -ExpandProperty "#cdata-section"
+                     $link = $_.link
+                     $description = $_.description | select-object -ExpandProperty "#cdata-section"
+                     $description = [regex]::matches($description , '<p>(.*?)</p>')
+                     $description = $description -replace "<p>",""
+                     [string]$description = $description -replace "</p>",""
+
+                     [pscustomobject]@{
+
+                                        Title = $title
+                                        News = $description
+                                        Link = $link
+
+                                       }
+                                       }
+                )
+
+
+# Show news objects            
+if($html -ne $true){$news}
+
+# Create HTML Page
+if($html -eq $true){
+# HTML header image
+$image_cbc = "https://i.ibb.co/SsVKmNj/505372227553.jpg"
+
+$html_page = "<html>"
+$html_page += '<Head><img src="' + $image_cbc + '" alt="' + $image_cbc + '" style="width:170px;height:100px;"></head>'
+$html_page += "<body>"
+$html_page += "</br>"
+$html_page += "<hr>"
+
+$news | foreach{
+
+$title = $_.title
+$news = $_.News
+$link = $_.link
+
+$html_page += '<table style="width:100%">'
+$html_page += "<tr><td><b>Title: </b>$title</td></tr>"
+$html_page += "<tr><td><b>News: </b>$news</td></tr>"
+$html_page += '<tr><td><b>Link: </b><a href="' + $link + '">CBC</a></td></tr>'
+$html_page += "</table>"
+$html_page += "<hr>"
+$html_page += "</br>"
 
 }
 
-$RSS
+$html_page += "</body>"
+$html_page += "</html>"
 
+$html_page_file = $env:temp + "\cbc_news.html"
+
+$html_page | Set-Content -Path $html_page_file
+
+Start-Process -FilePath $html_page_file
+
+}
 }
