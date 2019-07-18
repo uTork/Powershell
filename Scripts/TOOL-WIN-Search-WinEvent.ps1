@@ -80,8 +80,16 @@ param(
          [Parameter(Position=8,mandatory=$false)][string]$SmtpPassword,
          [Parameter(Position=9,mandatory=$false)][int]$port,
          [Parameter(Position=10,mandatory=$false)][string]$MailFrom,
-         [Parameter(Position=11,mandatory=$false)][string]$MailTo
+         [Parameter(Position=11,mandatory=$false)][string]$MailTo,
+         [Parameter(Position=11,mandatory=$false)][switch]$isPowerShell
     )
+
+if($isPowerShell -eq $true){
+$wiki = "https://github.com/uTork/Powershell/wiki/Function:-Search-WinEvent"
+
+Start-Process $wiki
+break
+}
 
 # Translate the level to french if the Windows is in french langage
 $cult = (get-culture).name
@@ -104,7 +112,7 @@ if($port -eq ""){$port ="25"}
 if($all -eq $true){[array]$EventLog = (Get-WinEvent -ListLog * -force -ErrorAction SilentlyContinue).LogName}
 
 
-$event_list = @(
+[array]$event_list = @(
                  $EventLog  | foreach{
                                      $log_name = $_ 
                                      
@@ -118,8 +126,9 @@ $event_list = @(
 $event_group = $event_list | sort ProviderName | Group-object id, Providername
 
 # PS object Creation from the last event of the set
-$event_Filtered = @(
-                    $event_group | foreach{
+[array]$event_Filtered = @(
+                   $event_group | foreach{
+
                                           $gr = $_.group | sort TimeCreated
                                           $event = $gr | Select-Object -Last 1
 
@@ -130,17 +139,24 @@ $event_Filtered = @(
                                           $message = $event.message
                                           $count = $_.Count
 
-                                          $event_last = New-Object PSObject
-                                          $event_last | Add-Member -type NoteProperty -Name 'ProviderName' -Value $provider
-                                          $event_last | Add-Member -type NoteProperty -Name 'timecreated' -Value $timecreated
-                                          $event_last | Add-Member -type NoteProperty -Name 'Count' -Value $count
-                                          $event_last | Add-Member -type NoteProperty -Name 'id' -Value $event_id
-                                          $event_last | Add-Member -type NoteProperty -Name 'leveldisplayname' -Value $level
-                                          $event_last | Add-Member -type NoteProperty -Name 'message' -Value $message
-                                          
-                                          $event_last
+                                          [pscustomobject]@{
+                                                           'ProviderName' = $provider
+                                                           'timecreated' = $timecreated
+                                                           'Count' = $count
+                                                           "id" = $event_id
+                                                           'leveldisplayname' = $level
+                                                           'message' = $message
+                                                           }  
+
                                          }
                )
+
+# Stop the script if no event is collected
+$count_obj = ($event_Filtered | Measure-Object).count
+$message = "No event found!"
+if($count_obj -eq 0){write-host $message;break}
+
+
 
 
 # Generate HTML report in temp directory
@@ -212,7 +228,7 @@ if($SmtpServer -eq ""){start-process -FilePath $html_path}
 $csv_path = $env:temp + "\report_search-winevent.csv"
 
 # Output the report to the console
-if($HTML -ne $true -and $SmtpServer -eq ""){$event_Filtered | Format-table}
+if($HTML -ne $true -and $SmtpServer -eq ""){$event_Filtered}
 
 # Set the Body of the email with the text report for the mail attachement                   
 If($HTML -ne $true -and $SmtpServer -ne ""){$event_Filtered | Export-csv -NoTypeInformation -Encoding UTF8 -Delimiter "|" -Path $csv_path} 
@@ -228,19 +244,16 @@ if($SmtpServer -ne ""){
 
     # Body of the mail ...simple
     [string]$html_body = @(
-                    "<hml>"
-                    "<Head></head>"
-                    "<body>"
-                    "<p>Hello,</p>"
-                    "<p>This is an automatic email with your HTML Report. Do not reply this email</p>"
-                    "</br>"
-                    "<p>Script created by  : Sebastien Maltais - sebastien_maltais@hotmail.com</p>"
-                    "</body>"
-                    "</html>"
-                    )
-
-
-
+                            "<hml>"
+                            "<Head></head>"
+                            "<body>"
+                            "<p>Hello,</p>"
+                            "<p>This is an automatic email with your HTML Report. Do not reply this email</p>"
+                            "</br>"
+                            "<p>Script created by  : Sebastien Maltais - sebastien_maltais@hotmail.com</p>"
+                            "</body>"
+                            "</html>"
+                           )
 
     #SMTP Server credential user/pass
     if($SmtpUser -ne "" -and $SmtpPassword -ne ""){
