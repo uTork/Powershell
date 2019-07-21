@@ -1,8 +1,8 @@
-# Script Analyse inactive user Active Directory
+# Script analyse inactive user Active Directory
 # needed module : Active Directory
 # needed module : install-module -name importexcel
 
-$excel = "C:\ps\report_ad_user_logon.xlsx"
+$excel = "C:\share\report_ad_user_logon.xlsx"
 
 $user = get-aduser -filter * -Properties *
 
@@ -74,3 +74,7 @@ $never_logged = $user | where-object {$_.LastLogonDate -eq $null}
 $never_logged = $never_logged | select-object Name,samaccountname,mail,description,LastLogonDate,enabled
 
 $never_logged | Export-Excel -Path $excel -WorksheetName "Never Logged" -TableName "never" -TableStyle Medium9 -AutoSize
+
+$computer = Get-ADComputer -Filter * -Properties *  | Select-Object Name,LastLogonDate
+
+$computer | Export-Excel -Path $excel -WorksheetName "Computer" -TableName "computer" -TableStyle Medium9 -AutoSize
