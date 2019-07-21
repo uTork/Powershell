@@ -1,6 +1,6 @@
 # Script Analyse inactive user Active Directory
 # needed module : Active Directory
-# needed module : install -name importexcel
+# needed module : install-module -name importexcel
 
 $excel = "C:\ps\report_ad_user_logon.xlsx"
 
