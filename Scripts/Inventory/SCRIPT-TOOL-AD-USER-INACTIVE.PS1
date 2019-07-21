@@ -6,14 +6,14 @@ $excel = "C:\share\report_ad_user_logon.xlsx"
 
 $user = get-aduser -filter * -Properties *
 
-$date1 = (date).AddDays(-365)
+$date_y = (date).AddDays(-365)
 
 $userlist_y = @(
                 $user | foreach{
                 
                 [string]$logon = $_.LastLogonDate
                 if($logon -ne ""){[datetime]$logon = $logon}
-                if($logon -lt $date1 -and $logon -ne ""){$_}
+                if($logon -lt $date_y -and $logon -ne ""){$_}
 
                 }
              )
@@ -23,14 +23,14 @@ $userlist_y = $userlist_y | select-object Name,samaccountname,mail,description,L
 $userlist_y | Export-Excel -Path $excel -WorksheetName "1 year" -TableName "year" -TableStyle Medium9 -AutoSize
 
 
-$date2 = (date).AddMonths(-6)
+$date_6m = (date).AddMonths(-6)
 
 $userlist_6m = @(
                 $user | foreach{
                 
                 [string]$logon = $_.LastLogonDate
                 if($logon -ne ""){[datetime]$logon = $logon}
-                if($logon -lt $date2 -and $logon -ne ""){$_}
+                if($logon -lt $date_6m -and $logon -ne ""){$_}
 
                 }
              )
@@ -40,13 +40,13 @@ $userlist_6m = $userlist_6m | select-object Name,samaccountname,mail,description
 $userlist_6m | Export-Excel -Path $excel -WorksheetName "6 month" -TableName "sixm" -TableStyle Medium9 -AutoSize
 
 
-$date3 = (date).AddMonths(-2)
+$date_2m = (date).AddMonths(-2)
 
 $userlist_2m = @(
                 $user | foreach{
                 [string]$logon = $_.LastLogonDate
                 if($logon -ne ""){[datetime]$logon = $logon}
-                if($logon -lt $date3 -and $logon -ne ""){$_}
+                if($logon -lt $date_2m -and $logon -ne ""){$_}
                 }
              )
 
@@ -54,13 +54,13 @@ $userlist_2m = $userlist_2m | select-object Name,samaccountname,mail,description
 
 $userlist_2m | Export-Excel -Path $excel -WorksheetName "2 month" -TableName "twom" -TableStyle Medium9 -AutoSize
 
-$date4 = (date).AddMonths(-1)
+$date_1m = (date).AddMonths(-1)
 
 $userlist_1m = @(
                 $user | foreach{
                 [string]$logon = $_.LastLogonDate
                 if($logon -ne ""){[datetime]$logon = $logon}
-                if($logon -lt $date4 -and $logon -ne ""){$_}
+                if($logon -lt $date_1m -and $logon -ne ""){$_}
                 }
              )
 
