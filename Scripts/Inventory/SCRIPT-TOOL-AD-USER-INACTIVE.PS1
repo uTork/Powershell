@@ -1,4 +1,4 @@
-# Script analyse inactive user Active Directory
+# Script Analyse inactive user Active Directory
 # needed module : Active Directory
 # needed module : install -name importexcel
 
