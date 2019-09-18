@@ -2,7 +2,7 @@
 # Sébastien Maltais
 # sebastien_maltais@hotmail.com
 
-# importation des listes de serveurs DASH et Controlleur de domaine
+# importation des listes de serveurs DH et Controlleur de domaine
 $DH_liste = import-csv -Path "C:\ps\dh.txt" | sort-object name
 $DR_liste = import-csv -Path "C:\ps\dc.txt" | sort-object name
 
@@ -13,7 +13,7 @@ $success_color = 'bgcolor="#009933"'
 # Nombre de count dans la sequence de ping
 $ping_count = 4
 
-# Créationde la page HTML
+# Création de la page HTML
 $html_page = "<html>"
 $html_page += "<body>"
 $html_page += "<h2>Alerte | Ping | Dash Server | Controlleur de domaine</h2>"
@@ -21,7 +21,7 @@ $html_page += "</br>"
 $html_page += '<table style="width:auto" border="1">'
 $html_page += "<tr><t>DH Server Name</td><td>IP Address</td><td>DNS Ping Test</td><td>IP Address Ping Test</td></tr>"
 
-# Traitement des serveur DASH avec le ping DNS et IP
+# Traitement des serveur DH avec le ping DNS et IP
 $DH_liste | foreach{
 
                         $IP = $_.ip
