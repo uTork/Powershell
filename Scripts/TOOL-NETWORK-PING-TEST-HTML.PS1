@@ -83,7 +83,7 @@ $date_subjet = get-date
 $server = "10.0.0.1"
 $port = "25"
 $recipient = "sebastien.maltais@Itruit.org"
-$sender = "ALERTE_PING@itruit"
+$sender = "ALERTE_PING@Istrocked.com"
 $subject = "Server Ping Report - $date_subjet"
 
 Send-MailMessage -Body $html_page -Encoding UTF8 -From $sender -To $recipient -Subject $subject -SmtpServer $server -Port $port -BodyAsHtml
