@@ -19,7 +19,7 @@ $html_page += "<body>"
 $html_page += "<h2>Alerte | Ping | Dash Server | Controlleur de domaine</h2>"
 $html_page += "</br>"
 $html_page += '<table style="width:auto" border="1">'
-$html_page += "<tr><t>DH Server Name</td><td>IP Address</td><td>DNS Ping Test</td><td>IP Address Ping Test</td></tr>"
+$html_page += "<tr><td>DH Server Name</td><td>IP Address</td><td>DNS Ping Test</td><td>IP Address Ping Test</td></tr>"
 
 # Traitement des serveur DH avec le ping DNS et IP
 $DH_liste | foreach{
