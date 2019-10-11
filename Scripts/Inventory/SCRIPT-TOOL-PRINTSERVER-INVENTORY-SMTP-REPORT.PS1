@@ -1,8 +1,7 @@
 # Printserver Inventory Script
 # Module Needed : install-module ImportExcel
 
-# Import PrintServer list. 
-# The servers.txt file need to be placed at the root of the script 
+# Import PrintServer list from AD
 $Printservers_list =  (get-adcomputer -Filter * -Properties * | where-object {$_.name -like "*PR*" -or $_.name -like "*PRINT*"}).name
 
 # Excel Report file
