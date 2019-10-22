@@ -8,8 +8,8 @@ This command create an array @("firstname,surname")
 .PARAMETER Number_of_users
 Number of user to create
 .EXAMPLE 
-Get-NameList -number_of_users 10000
-Give a list of 10 000 name
+Get-NameList -number_of_users 1000
+Give a list of 1000 name
 .LINK
 Sebastien Maltais
 sebastien_maltais@hotmail.com
