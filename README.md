@@ -1,7 +1,7 @@
 # ![logo][] *is*PowerShell
 [logo]: https://i.ibb.co/ryZ6X8n/atome-mauve2.jpg
 
-[Creator: Sébastien Maltais](https://www.linkedin.com/in/sebastienmaltais/)
+[Creator | Sébastien Maltais](https://www.linkedin.com/in/sebastienmaltais/)
 
 #### EN
 The persistance is the only way to get a sucess in a PowerShell environment. More you persist more you become persistant. If you persist in this way. The Powershell environment open for you a new world of concept. You cant imagine it before you have learned it.
