@@ -17,4 +17,6 @@ La persistance est le seul moyen de réussir dans un environnement PowerShell. P
 
 [isPowerShell Wiki (FR/EN)](https://github.com/uTork/PowerShell/wiki)
 
+[Creator: Sébastien Maltais](https://www.linkedin.com/in/sebastienmaltais/)
+
 
