@@ -4,7 +4,7 @@
 # LinkedIn : https://www.linkedin.com/in/sebastienmaltais/
 
 
-# List des controleurs baser la la commande AD get-adcomputer
+# List des controleurs de domaine baser sur la commande AD get-adcomputer
 $dc = (get-adcomputer -filter * -Properties * | where-object {$_.name -like "*dc*"}).name
 
 # Redémarrage des serveurs
