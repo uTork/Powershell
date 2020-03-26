@@ -1,28 +1,51 @@
-# Ajoute les membre du groupe source au groupe de destination Active Directory
-# Synchronise les usagers pour des services qui ne supporte pas les groupe de deuxième niveau
-# Module : Active Directory
-# Auteur: Sébastien Maltais
-# Courriel: sebastien_maltais@hotmail.com
+function Sync-ADGroupMembers {
+<#
+.SYNOPSIS
+ This script is created to sync domain users group members to another group for application use.
+.DESCRIPTION
+Sync Active Directory group member to antoher group at level one only
+.PARAMETER SOURCE
+Active Directory Source Group
+.PARAMETER DESTINATION
+Active Directory Destination Group
+.LINK
+Sebastien Maltais
+sebastien_maltais@hotmail.com
+GIT: https://github.com/uTork/Powershell/
+LinkedIn: https://www.linkedin.com/in/sebastienmaltais/
+FaceBook: http://www.facebook.com/isPowerShell
+#>
 
-# Groupe source
-$groupe_source = "domain users"
-
-# Groupe destination
-$groupe_destination = "ITIL users"
+PARAM(
+      [string]$SOURCE,
+      [string]$DESTINATION
+      )
 
 # Extraction des membres du groupe source
-$membres_source = Get-ADGroup $groupe_source | Get-ADGroupMember | Where-Object {$_.objectClass -eq "user"}
+$membres_source = Get-ADGroup $SOURCE | Get-ADGroupMember | Where-Object {$_.objectClass -eq "user"}
 
 # extraction des membres de destination pour la comparaison
-$membres_destination = Get-ADGroup $groupe_destination | Get-ADGroupMember | Where-Object {$_.objectClass -eq "user"}
-
-# compare les groupe et extrait les utilisateur manquant du groupe source
-$compare = (Compare-Object -ReferenceObject $membres_source -DifferenceObject $membres_destination | where-object {$_.sideindicator -eq "<="}).inputobject
+$membres_destination = Get-ADGroup $DESTINATION | Get-ADGroupMember | Where-Object {$_.objectClass -eq "user"}
 
 
-# ajout des utilisateurs au groupe de destination
-foreach($membre in $compare){
+if($membres_destination -ne $null){
+                                    # compare les groupe et extrait les utilisateur manquant du groupe source
+                                    $compare = (Compare-Object -ReferenceObject $membres_source -DifferenceObject $membres_destination | where-object {$_.sideindicator -eq "<="}).inputobject
 
-get-adgroup -Identity $groupe_destination | Add-ADGroupMember -Members $membre
 
-}
+                                    # ajout des utilisateurs au groupe de destination si il ya un delta
+                                    foreach($membre in $compare){
+
+                                    get-adgroup -Identity $DESTINATION | Add-ADGroupMember -Members $membre
+
+                                    }
+                                    }else{
+                                    # ajout tout les utilisateurs au complet du groupe source
+                                    foreach($membre in $membres_source){
+
+                                    get-adgroup -Identity $DESTINATION | Add-ADGroupMember -Members $membre
+
+                                    }
+
+                                    }
+                                    }
