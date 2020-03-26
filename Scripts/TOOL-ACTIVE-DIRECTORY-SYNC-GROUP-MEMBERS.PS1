@@ -5,9 +5,9 @@ Le script a été creer pour synchroniser les membres du groupe domain users ver
 .DESCRIPTION
 Synchronise les membres du groupe source vers le groupe de destination. Les membres du premier sont niveau seulement.
 .PARAMETER SOURCE
-Active Directory Source Group
+Groupe Source Active Directory
 .PARAMETER DESTINATION
-Active Directory Destination Group
+Groupe de Destination Active Directory
 .LINK
 Sebastien Maltais
 sebastien_maltais@hotmail.com
