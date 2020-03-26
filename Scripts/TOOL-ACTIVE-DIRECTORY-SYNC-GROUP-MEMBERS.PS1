@@ -3,7 +3,7 @@ function Sync-ADGroupMembers {
 .SYNOPSIS
 Le script a été creer pour synchroniser les membres du groupe domain users vers un autres groupe active directory
 .DESCRIPTION
-Synchronise les membres du groupe source vers le groupe de destination. Les membres du premier sont niveau seulement.
+Synchronise les membres du groupe source vers le groupe de destination. Les membres du premier niveau seulement.
 .PARAMETER SOURCE
 Groupe Source Active Directory
 .PARAMETER DESTINATION
