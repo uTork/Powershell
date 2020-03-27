@@ -1,7 +1,9 @@
 function Sync-ADGroupMembers {
 <#
 .SYNOPSIS
-Le script a été creer pour synchroniser les membres du groupe domain users vers un autres groupe active directory
+Le script a été creer pour synchroniser les membres du groupe domain users vers un autres groupe active directory.
+La fonction sert dans une tâche planifié qui s'exécute à toutes les 15 minutes. Quand un utilisateur est ajouté au
+groupe "domain users" par exemple. L'utilisateur ce synchronise quand la tâche planifier s'exécute.
 .DESCRIPTION
 Synchronise les membres du groupe source vers le groupe de destination. Les membres du premier sont niveau seulement.
 .PARAMETER SOURCE
