@@ -9,7 +9,7 @@ Configure le Path du profile Terminal Server de l'objet active des usagers membr
 .PARAMETER ADGroup
 Groupe Source Active Directory qui contient les membres a configurer
 .PARAMETER TSProfilePath
-PATH UNC du chemin du profile TS . Ex: "\\server\share$\%username%"
+PATH UNC du chemin du profile Terminal Server . Ex: "\\server\share$\%username%"
 .LINK
 Sebastien Maltais
 sebastien_maltais@hotmail.com
