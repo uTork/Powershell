@@ -1,4 +1,4 @@
-function Set-ADuserTsprofile {
+function Set-ADuserTSProfile {
 <#
 .SYNOPSIS
 Cette fonction permet de changer le path du profile terminal serveur sur les utilisateurs members d'un groupe Active Directory. 
