@@ -2,8 +2,7 @@ function Set-ADuserTsprofile {
 <#
 .SYNOPSIS
 Cette fonction permet de changer le path du profile terminal serveur sur les utilisateurs members d'un groupe Active Directory. 
-Cette fonction sera utiliser dans une tâches planifié 
-qui s'exécute au 15minutes.
+Cette fonction sera utiliser dans une tâches planifié qui s'exécute au 15minutes.
 .DESCRIPTION
 Configure le Path du profile Terminal Server de l'objet active des usagers membres d'un groupe AD
 .PARAMETER ADGroup
