@@ -24,7 +24,7 @@ PARAM(
       )
 
 # Extraction des membres du groupe active directory
-$goupmember = get-adgroup -Identity $TSProfilePath | Get-ADGroupMember | where-object {$_.objectClass -eq "user"}
+$goupmember = get-adgroup -Identity $ADGroup | Get-ADGroupMember | where-object {$_.objectClass -eq "user"}
 
 # Ajout du chemin du profil à l'attribut AD de l'usager
 Foreach ($user in $goupmember) {
