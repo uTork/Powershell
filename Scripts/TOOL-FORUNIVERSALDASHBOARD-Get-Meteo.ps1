@@ -69,7 +69,7 @@ $humidity = $humidity   + "%"
 
 # Pressure
 [string]$pressure = $meteo.main.pressure 
-$pressure = $pressure  + "kPa"
+$pressure = $pressure  + "hPa"
 
 # Visibility
 [string]$visibility = [math]::Round($meteo.visibility /1000)
