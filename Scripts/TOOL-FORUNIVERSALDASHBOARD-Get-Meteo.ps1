@@ -8,7 +8,7 @@ Developed for use with Universal Dashboard.
 .PARAMETER City
 Enter the name of the city you want and get the meteo information
 .EXAMPLE
-Get-Meteo -City "shipshaw" -ApiKey "8d409c0358df4b499c11931e717f2561"
+Get-Meteo -City "montreal" -ApiKey "8d409c0358df4b499c11931e717f2561"
 .LINK
 Sebastien Maltais
 sebastien_maltais@hotmail.com
@@ -19,15 +19,16 @@ FaceBook: http://www.facebook.com/isPowerShell
 
 [CmdletBinding()]
 
-param(
-      [string]$City,
+param([string]$City,
       [string]$ApiKey
-      )
+
+
+)
 
 
 
 # API URL
-$query = "http://api.openweathermap.org/data/2.5/weather?q=$city&APPID=$ApiKey"
+$query = "http://api.openweathermap.org/data/2.5/weather?q=Shipshaw&APPID=8d409c0358df4b499c11931e717f2561"
 
 # Query Open Weather Map
 $meteo = try{Invoke-RestMethod $query -ErrorAction Stop}catch{
@@ -48,15 +49,18 @@ $meteo = try{Invoke-RestMethod $query -ErrorAction Stop}catch{
                                                              }
 
 # Current temp
-[string]$current_temp =  [math]::Round($meteo.main.temp /10)
+
+$kelvin = "273.15"
+
+[string]$current_temp =  [math]::Round($meteo.main.temp - $kelvin)
 $current_temp = $current_temp + "°C"
 
 # Min temp
-[string]$min_temp =  [math]::Round($meteo.main.temp_min /10)
+[string]$min_temp =  [math]::Round($meteo.main.temp_min - $kelvin)
 $min_temp = $min_temp + "°C"
 
 # Max temp
-[string]$max_temp =  [math]::Round($meteo.main.temp_max /10)
+[string]$max_temp =  [math]::Round($meteo.main.temp_max - $kelvin)
 $max_temp = $max_temp + "°C"
 
 # Humidity
@@ -64,7 +68,7 @@ $max_temp = $max_temp + "°C"
 $humidity = $humidity   + "%"
 
 # Pressure
-[string]$pressure = $meteo.main.pressure /10
+[string]$pressure = $meteo.main.pressure 
 $pressure = $pressure  + "kPa"
 
 # Visibility
