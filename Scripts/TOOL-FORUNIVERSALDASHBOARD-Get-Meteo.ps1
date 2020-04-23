@@ -8,7 +8,7 @@ Developed for use with Universal Dashboard.
 .PARAMETER City
 Enter the name of the city you want and get the meteo information
 .EXAMPLE
-Get-Meteo -City "montreal" -ApiKey "8d409c0358df4b499c11931e717f2561"
+Get-Meteo -City "Jonquiere" -ApiKey "8d409c0358df4b499c11931e717f2561"
 .LINK
 Sebastien Maltais
 sebastien_maltais@hotmail.com
