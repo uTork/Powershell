@@ -28,7 +28,7 @@ param([string]$City,
 
 
 # API URL
-$query = "http://api.openweathermap.org/data/2.5/weather?q=Shipshaw&APPID=8d409c0358df4b499c11931e717f2561"
+$query = "http://api.openweathermap.org/data/2.5/weather?q=$City&APPID=$ApiKey"
 
 # Query Open Weather Map
 $meteo = try{Invoke-RestMethod $query -ErrorAction Stop}catch{
