@@ -1,5 +1,5 @@
 ### TOOL-UD-GET-CNN.PS1
-Convertissez les actualités CNN en objet PowerShell pour un tableau de bord universel ou en HTML pour la lecture. | Convert the CNN 
+Convertissez les actualités CNN en objet PowerShell pour un universal dashbord ou en HTML pour la lecture. | Convert the CNN 
 news to powershell object for universal dashboard or HTML for reading
 
 
