@@ -82,7 +82,7 @@ $female_link = @(
 
 
 # Html Table extraction with the command Get-HtmlTable from the ImportExcel module
-# Extraction des tables HTML avec la commande Get-HtmlTabledu mdule importexcel
+# Extraction des tables HTML avec la commande Get-HtmlTable du module importexcel
 $surname_list = (@($surname_link |%{Get-HtmlTable -url $_})).surname
 $male_list = (@($male_link |%{Get-HtmlTable -url $_})).name
 $female_list = (@($female_link |%{Get-HtmlTable -url $_})).name
