@@ -1,8 +1,7 @@
 function Get-RemoteVMDiskUsage{
 <#
 .SYNOPSIS
-Cette fonction a été créée pour analyser l’espace utilisé par un ordinateur distant. 
-Elle calcule chaque disque et calcule le total de l’espace utiliser.
+Cette fonction a été créée pour analyser l’espace utilisé par un ordinateur distant. Elle calcule chaque disque et calcule le total de l’espace utiliser.
 .DESCRIPTION
 Analyse les disque d'un ordinateur distant
 .PARAMETER COMPUTER
@@ -20,6 +19,7 @@ FaceBook: http://www.facebook.com/isPowerShell
 param(
       [string]$COMPUTER
      )
+
 
 
 # Creation de la liste des disques dur
@@ -47,10 +47,23 @@ $disque = Get-WmiObject Win32_LogicalDisk -ComputerName $computer | where-Object
 }
 
 # Soustratction et conversion du total en GB
-[string]$used = [Math]::Round($size / 1gb - $free / 1gb)
+    # esapce utiliser sur le disque
+    [string]$used = [Math]::Round($size / 1gb - $free / 1gb)
 
-# Message de sortit
-$output = $computer + " | Disk Usage: " + $used + " GB"
+    # Espace totale alloué à l'ordinateur
+    [string]$size = [Math]::Round($size /1gb)
 
-write-output $output
+    # Esapce libre total
+    [string]$free = [Math]::Round($free /1gb)
+
+# Creation et affichage de l'objet powershell
+        [pscustomobject]@{
+
+                    "Computer" = $computer
+                    "Provisionned(GB)" = $size
+                    "Used(GB)" = $used
+                    "Free(GB)" =  $free
+                         }
+
 }
+
