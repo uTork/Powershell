@@ -50,7 +50,7 @@ $goupmember = get-adgroup -Identity $ADGroup | Get-ADGroupMember | where-object 
 Foreach ($user in $goupmember) {
                                 $AD = get-aduser $user.samaccountname | select -ExpandProperty disting*
                                 $ADUser = [ADSI]"LDAP://$AD"
-                                $ADUser.psbase.InvokeSet(“terminalservicesprofilepath",$TSProfilePath)
+                                $ADUser.psbase.InvokeSet("terminalservicesprofilepath",$TSProfilePath)
                                 $ADuser.setinfo()
                                 }
                                 }
