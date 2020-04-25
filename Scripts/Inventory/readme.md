@@ -6,3 +6,6 @@ Donne un rapport sur la performance et la statue matérielle des machines virtue
 
 ### TOOL-PRINTSERVER-INVENTORY-SMTP-REPORT.PS1
 Le script fait un rapport Excel des serveurs d’impression et envoi le rapport par courriel. | The script makes an Excel report from the print servers and sends the report by email.
+
+### TOOL-STORAGE-GET-REMOTEVMDISKUSAGE.PS1
+Cette fonction a été créée pour analyser l’espace utilisé par un ordinateur distant. Elle calcule chaque disque et calcule le total de l’espace utiliser. | This function was created to analyze the space used by a remote computer. It calculates each disk and calculates the total space used.
