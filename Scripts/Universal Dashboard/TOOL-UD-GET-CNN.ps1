@@ -4,7 +4,7 @@ function Get-CNN {
 .SYNOPSIS
 Get CNN news from RSS
 .DESCRIPTION
-Convert the news for object for universal dashboard or HTML for reading
+Convert the CNN news to powershell object for universal dashboard or HTML for reading
 .PARAMETER Category
 News Category
 .PARAMETER HTML
