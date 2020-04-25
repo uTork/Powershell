@@ -3,3 +3,6 @@ Donne un rapport sur les dossiers « HOME » des utilisateurs. Exemple : Les per
 
 ### TOOL-HYPERV-INVENTORY.PS1
 Donne un rapport sur la performance et la statue matérielle des machines virtuelles sur un hôte hyper-v. | Reports on the performance and hardware status of virtual machines on a hyper-v host.
+
+### TOOL-PRINTSERVER-INVENTORY-SMTP-REPORT.PS1
+Le script fait un rapport Excel des serveurs d’impression et envoi le rapport par courriel. | The script makes an Excel report from the print servers and sends the report by email.
