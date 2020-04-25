@@ -39,20 +39,16 @@ $disque = Get-WmiObject Win32_LogicalDisk -ComputerName $computer | where-Object
 # Addition de l'espace disque
 [long]$size = $size + $add_size
 [long]$free = $free + $add_free
-
-
-
 }
 
+# esapce utiliser sur le disque
+[string]$used = [Math]::Round($size / 1gb - $free / 1gb)
 
-    # esapce utiliser sur le disque
-    [string]$used = [Math]::Round($size / 1gb - $free / 1gb)
+# Espace totale alloué à l'ordinateur
+[string]$size = [Math]::Round($size /1gb)
 
-    # Espace totale alloué à l'ordinateur
-    [string]$size = [Math]::Round($size /1gb)
-
-    # Esapce libre total
-    [string]$free = [Math]::Round($free /1gb)
+# Esapce libre total
+[string]$free = [Math]::Round($free /1gb)
 
 # Creation et affichage de l'objet powershell
 [pscustomobject]@{
