@@ -20,6 +20,9 @@ param(
       [string]$COMPUTER
      )
 
+# Sélection de l'ordinateur local si aucun nom d'ordinateur n'est saisit
+if($computer -eq ""){$computer = "localhost"}
+
 # Creation de la liste des disques dur
 $lettre_du_disque = (Get-WmiObject Win32_LogicalDisk -ComputerName $computer | where-object {$_.DriveType -eq "3"}).deviceid
 
@@ -39,7 +42,11 @@ $disque = Get-WmiObject Win32_LogicalDisk -ComputerName $computer | where-Object
 # Addition de l'espace disque
 [long]$size = $size + $add_size
 [long]$free = $free + $add_free
+
+
+
 }
+
 
 # esapce utiliser sur le disque
 [string]$used = [Math]::Round($size / 1gb - $free / 1gb)
