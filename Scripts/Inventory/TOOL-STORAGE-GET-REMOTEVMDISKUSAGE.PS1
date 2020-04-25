@@ -20,8 +20,6 @@ param(
       [string]$COMPUTER
      )
 
-
-
 # Creation de la liste des disques dur
 $lettre_du_disque = (Get-WmiObject Win32_LogicalDisk -ComputerName $computer | where-object {$_.DriveType -eq "3"}).deviceid
 
@@ -46,7 +44,7 @@ $disque = Get-WmiObject Win32_LogicalDisk -ComputerName $computer | where-Object
 
 }
 
-# Soustratction et conversion du total en GB
+
     # esapce utiliser sur le disque
     [string]$used = [Math]::Round($size / 1gb - $free / 1gb)
 
@@ -57,13 +55,13 @@ $disque = Get-WmiObject Win32_LogicalDisk -ComputerName $computer | where-Object
     [string]$free = [Math]::Round($free /1gb)
 
 # Creation et affichage de l'objet powershell
-        [pscustomobject]@{
+[pscustomobject]@{
 
-                    "Computer" = $computer
-                    "Provisionned(GB)" = $size
-                    "Used(GB)" = $used
-                    "Free(GB)" =  $free
-                         }
+                  "Computer" = $computer
+                  "Provisionned(GB)" = $size
+                  "Used(GB)" = $used
+                  "Free(GB)" =  $free
+                 }
 
 }
 
