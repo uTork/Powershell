@@ -49,7 +49,7 @@ else { $false } #module not available
 else { $true } #module already loaded
 } 
 $message1 = "Install the ImportExcel module on Powershell Gallery............."
-$importexcel = get-mymodule -name “importexcel”
+$importexcel = get-mymodule -name "importexcel"
 if($importexcel -eq $false){clear;write-output $message1;break}
 
 
