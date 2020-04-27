@@ -1,5 +1,6 @@
 # Printserver Inventory Script
 # Module Needed : install-module ImportExcel
+# Module Needed : install-module ActiveDirectory
 
 # Import PrintServer list from AD from the get-adcomputer command
 # importe la liste des serveurs d'impression à partir de la commande get-adcomputer
