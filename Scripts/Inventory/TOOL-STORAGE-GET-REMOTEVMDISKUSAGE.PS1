@@ -2,7 +2,8 @@ function Get-RemoteVMDiskUsage{
 <#
 .SYNOPSIS
 FR
-Cette fonction a été créée pour analyser l’espace utilisé par un ordinateur distant. Elle calcule chaque disque et calcule le total de l’espace utiliser.
+Cette fonction a été créée pour analyser l’espace utilisé par un ordinateur distant. 
+Elle calcule chaque disque et calcule le total de l’espace utiliser.
 
 EN
 This function was created to analyze the space used by a remote computer. It calculates each disk and calculates the total space used.
