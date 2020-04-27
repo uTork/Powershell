@@ -4,7 +4,7 @@
 
 # Import PrintServer list from AD from the get-adcomputer command
 # importe la liste des serveurs d'impression à partir de la commande get-adcomputer
-$keyword = "spool" # The keyword is a word the name of all print server containt the server | Le mot clé contenu dans le nom des serveurs d'impression.
+$keyword = "spool" # The keyword is a word the name of all print server | Le mot clé contenu dans le nom des serveurs d'impression.
 $Printservers_list =  (get-adcomputer -Filter * -Properties * | where-object {$_.name -like "*$keyword*"}).name
 
 # Excel Report file
