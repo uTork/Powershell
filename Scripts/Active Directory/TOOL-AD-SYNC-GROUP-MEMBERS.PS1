@@ -32,21 +32,21 @@ PARAM(
       [string]$DESTINATION
       )
 
-# Extraction des membres du groupe source
+# Extraction des membres du groupe source | Extract sources members to variable
 $membres_source = Get-ADGroup $SOURCE | Get-ADGroupMember | Where-Object {$_.objectClass -eq "user"}
 
 if($membres_source -ne $null){
 
-# extraction des membres de destination pour la comparaison
+# extraction des membres de destination pour la comparaison | Extract destination members for comparaison
 $membres_destination = Get-ADGroup $DESTINATION | Get-ADGroupMember | Where-Object {$_.objectClass -eq "user"}
 
 
 if($membres_destination -ne $null){
-                                    # compare les groupes et extrait les utilisateurs manquant du groupe source
+                                    # compare les groupes et extrait les utilisateurs manquant du groupe source | Compare group and get users differential
                                     $compare = (Compare-Object -ReferenceObject $membres_source -DifferenceObject $membres_destination | where-object {$_.sideindicator -eq "<="}).inputobject
 
 
-                                    # ajout des utilisateurs au groupe de destination si il ya un delta
+                                    # ajout des utilisateurs au groupe de destination si il ya un delta | add user diffenrencial to destination
                                     foreach($membre in $compare){
 
                                     get-adgroup -Identity $DESTINATION | Add-ADGroupMember -Members $membre
@@ -54,7 +54,7 @@ if($membres_destination -ne $null){
                                     }
                                     }else{
                                     
-                                    # ajout tout les utilisateurs au complet du groupe source
+                                    # ajout tout les utilisateurs au complet du groupe source | add all source user to the destination group
                                     foreach($membre in $membres_source){
 
                                     get-adgroup -Identity $DESTINATION | Add-ADGroupMember -Members $membre
