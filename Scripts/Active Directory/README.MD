@@ -3,7 +3,7 @@ Cette fonction permet de changé le path du profile terminal serveur sur les uti
 Cette fonction sera utiliser dans une tâches planifié. | This function allows you to change the path of the terminal server
 profile on users who are members of an Active Directory group. This function will be used in a scheduled task.
 
-### TOOL-AD-SHUTDOWN-SERVER-LIST.PS1 (DEV)
+### Reboot-Computer.PS1 (DEV)
 Redémarrage d'une liste de serveur basé sur un mot clé dans Active Directory | Restarting a keyword-based server list in Active Directory
 
 ### TOOL-AD-SYNC-GROUP-MEMBERS.PS1
