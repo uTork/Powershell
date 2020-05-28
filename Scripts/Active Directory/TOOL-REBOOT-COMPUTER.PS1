@@ -2,7 +2,7 @@ function Reboot-Computer {
 <#
 .SYNOPSIS
 FR
-Cette fonction sert à redémarrer un ordinateur distant, une liste d’ordinateur dans un fichier CSV ou encore une partie du nom pour créer une liste d'ordinateurs (-LIKE).
+Cette fonction sert à redémarrer un ordinateur distant, une liste d’ordinateur dans un fichier CSV ou encore une partie des ordinateurs (-LIKE).
 Vous devez avoir les droits administrateurs sur les ordinateurs distants afin de pouvoir les redémarrer.
 EN
 This function is used to restart a remote computer, a computer list in a CSV file or even a part of the computers (-LIKE). 
@@ -10,7 +10,7 @@ You must have administrator rights on remote computers before you can restart th
 .DESCRIPTION
 Reboot Remote Computer | Redémarre les ordinateurs distant
 .PARAMETER RemoteComputer
-Le nom de l'ordinateur distant à redémarrer | The name of the remote computer
+The name of the remote computer | Le nom de l'ordinateur distant à redémarrer
 .PARAMETER CSV
 Chemin du fichier CSV contenant le nom des ordinateurs. Un nom d'ordinateur par ligne. | CSV File Path. One computer name per line.
 .PARAMETER LIKE
