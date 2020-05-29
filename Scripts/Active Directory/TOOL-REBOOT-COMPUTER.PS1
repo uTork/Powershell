@@ -50,7 +50,7 @@ if($DelaySeconds -ne ""){$DelaySeconds = 1}
 if($CSV -ne ""){
 
 # CSV import
-$cp = try{@(get-content -path $CSV -ErrorAction stop)}catch{$message = "Path not found";Write-Host $message,break}
+$cp = try{@(get-content -path $CSV -ErrorAction stop)}catch{$message = "Path not found";Write-Host $message;break}
 
 # Redémarrage des serveurs | reboot computer list
 $cp | foreach{
