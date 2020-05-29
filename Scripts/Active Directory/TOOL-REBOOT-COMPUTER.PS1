@@ -42,7 +42,7 @@ if($RemoteComputer -ne ""){
 
 # Validation des secondes de delais entre les redémarrage des serveurs | Validation if Seconds exist
 
-if($DelaySeconds -ne ""){$DelaySeconds = 1}
+if($DelaySeconds -eq ""){$DelaySeconds = 1}
 
 
 
