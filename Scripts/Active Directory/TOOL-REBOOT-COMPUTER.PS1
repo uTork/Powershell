@@ -16,6 +16,8 @@ Chemin du fichier CSV contenant le nom des ordinateurs. Un nom d'ordinateur par 
 .PARAMETER LIKE
 Mot contenu dans le nom des serveurs dans Active Directory. Tous les ordinateurs qui contiennent ce mot dans son nom seront redémarrés.
 Word contained in the name of the servers in Active Directory. All computers that contain this word in its name will be restarted.
+.PARAMETER DelaySeconds
+Les nombres de secondes entre chaques démarrage des ordinateurs. | The delay in seconds between computer reboot.
 .LINK
 Sebastien Maltais
 sebastien_maltais@hotmail.com
@@ -27,7 +29,8 @@ FaceBook: http://www.facebook.com/isPowerShell
 PARAM(
       [string]$RemoteComputer,
       [string]$CSV,
-      [string]$LIKE
+      [string]$LIKE,
+      [int]$DelaySeconds
       )
 
 if($RemoteComputer -ne ""){
@@ -37,17 +40,24 @@ if($RemoteComputer -ne ""){
     Write-Host $message
 }
 
+# Validation des secondes de delais entre les redémarrage des serveurs | Validation if Seconds exist
+
+if($DelaySeconds -ne ""){$DelaySeconds = 1}
+
+
+
+
 if($CSV -ne ""){
 
 # CSV import
-$cp = try{@(get-content -path C:\script\cpu.txt -ErrorAction stop)}catch{$message = "Path not found";Write-Host $message}
+$cp = try{@(get-content -path C:\script\cpu.txt -ErrorAction stop)}catch{$message = "Path not found";Write-Host $message,break}
 
 # Redémarrage des serveurs | reboot computer list
 $cp | foreach{
               $name = $_
               shutdown /r /f /m \\$name
               # Pause 5 minutes
-              Start-Sleep -Seconds 300
+              Start-Sleep -Seconds $DelaySeconds
               # Message 
               $message = "$name --OK"
               Write-Host $message
@@ -84,13 +94,13 @@ $cp | foreach{
               shutdown /r /f /m \\$name
 
               # Pause 5 minutes
-              Start-Sleep -Seconds 300
+              Start-Sleep -Seconds $DelaySeconds
 
               # Message 
               $message = "$name --OK"
               Write-Host $message
               
               }
-}
+      }
 }
 
