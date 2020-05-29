@@ -35,7 +35,7 @@ PARAM(
 
 if($RemoteComputer -ne ""){
     #redémarre l'ordinateur | reboot the computer server
-    shutdown /r /f /m \\$RemoteComputer
+    shutdown /r /f /m \\$RemoteComputer /t 1
     $message = "The computer $RemoteComputer is restarting"
     Write-Host $message
 }
@@ -43,6 +43,9 @@ if($RemoteComputer -ne ""){
 # Validation des secondes de delais entre les redémarrage des serveurs | Validation if Seconds exist
 
 if($DelaySeconds -ne ""){$DelaySeconds = 1}
+
+
+
 
 if($CSV -ne ""){
 
@@ -52,7 +55,7 @@ $cp = try{@(get-content -path $CSV -ErrorAction stop)}catch{$message = "Path not
 # Redémarrage des serveurs | reboot computer list
 $cp | foreach{
               $name = $_
-              shutdown /r /f /m \\$name
+              shutdown /r /f /m \\$name /t 1
               # Pause 5 minutes
               Start-Sleep -Seconds $DelaySeconds
               # Message 
@@ -88,7 +91,7 @@ $cp = (get-adcomputer -filter * -Properties * | where-object {$_.name -like $lik
 # Redémarrage des serveurs | reboot server list
 $cp | foreach{
               $name = $_
-              shutdown /r /f /m \\$name
+              shutdown /r /f /m \\$name /t 1
 
               # Pause 5 minutes
               Start-Sleep -Seconds $DelaySeconds
