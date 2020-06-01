@@ -1,5 +1,5 @@
 # ![logo][] *is*PowerShell
-[logo]: https://i.ibb.co/RyPNy95/atome.png
+[logo]: http://www.ispower.net/wp-content/uploads/2020/06/atome.png
 
 [Creator | Sébastien Maltais](https://www.linkedin.com/in/sebastienmaltais/)
 
