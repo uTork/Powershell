@@ -9,6 +9,9 @@ The persistance is the only way to get a sucess in a PowerShell environment. Mor
 #### FR
 La persistance est le seul moyen de réussir dans un environnement PowerShell. Plus vous persistez plus vous devenez persistant. Si vous persistez dans cette voie. L'environnement Powershell vous ouvre un nouveau monde de concept. Vous ne pouvez pas l’imaginer avant de l’avoir appris.
 
+#### ES
+La persistencia es la única forma de tener éxito en un entorno PowerShell. Cuanto más persista, más persistente se volverá. Si persiste en este camino. El entorno Powershell abre un nuevo mundo de conceptos. No puedes imaginarlo hasta que lo aprendas.
+
 [logo]: https://raw.githubusercontent.com/PowerShell/PowerShell/master/assets/ps_black_64.svg?sanitize=true
 ##### Microsoft Repository: [Powershell Gallery](https://www.powershellgallery.com/)
 
