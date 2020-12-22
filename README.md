@@ -28,12 +28,7 @@ La persistencia es la única forma de tener éxito en un entorno PowerShell. Cua
 ##### Microsoft Repository: [Powershell Gallery](https://www.powershellgallery.com/)
 
 #### The GIT is devoted to examples of powershell scripts and the use of modules.
-[isPowerShell Facebook Live Streaming](http://www.facebook.com/ispowershell)
-
-[isPowershell Youtube Channel](https://www.youtube.com/channel/UCMGB_tnUzFgUEZgXMZ37EFg)
 
 [isPowerShell Wiki (FR/EN)](https://github.com/uTork/PowerShell/wiki)
-
-
 
 
