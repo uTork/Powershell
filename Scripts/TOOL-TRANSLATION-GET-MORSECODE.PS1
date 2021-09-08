@@ -7,6 +7,8 @@ Convert text to morse code
 Convertir du texte en code morse | convert text to morse code
 .PARAMETER TEXT
 TEXT to translate
+.PARAMETER MORSE
+MORSE to translate
 .LINK
 Sebastien Maltais
 sebastien_maltais@hotmail.com
