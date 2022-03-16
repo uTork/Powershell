@@ -11,16 +11,13 @@ La persistance est le seul moyen de réussir dans un environnement PowerShell. P
 
 #### ES
 La persistencia es la única forma de tener éxito en un entorno PowerShell. Cuanto más persista, más persistente se volverá. Si persiste en este camino. El entorno Powershell abre un nuevo mundo de conceptos. No puedes imaginarlo hasta que lo aprendas.
-
 #### HB
 התמדה היא הדרך היחידה להצליח בסביבת PowerShell. ככל שאתה מתמיד כך אתה מתמיד יותר. אם אתה מתמיד בנתיב הזה. סביבת ה- Powershell פותחת עולם מושג חדש. אתה לא יכול לדמיין את זה עד שלמדת את זה.
-
 #### JP
 持続性は、PowerShell環境で成功する唯一の方法です。 持続するほど持続する。 このように固執すれば。 Powershell環境は、新しいコンセプトの世界を開きます。 学ぶ前に想像することはできません。
 
-#### RU
-Постоянство - единственный способ добиться успеха в среде PowerShell. Чем больше вы упорствуете, тем настойчивее вы становитесь. Если вы будете продолжать в том же духе. Среда Powershell открывает новый мир концепций. Вы не можете себе это представить, пока не научитесь этому.
-
+#### AR
+المثابرة هي الطريقة الوحيدة لتحقيق النجاح في بيئة PowerShell. كلما استمريت في الإصرار كلما أصبحت مثابرًا. إذا كنت تصر على هذا النحو. بيئة Powershell تفتح لك عالمًا جديدًا من المفاهيم. لا يمكنك تخيلها قبل أن تتعلمها.
 #### CH
 持久性是在PowerShell环境中成功的唯一方法。 坚持得越多，就变得越执着。 如果您坚持这种方式。 Powershell环境打开了一个新的概念世界。 学习之前无法想象。
 
