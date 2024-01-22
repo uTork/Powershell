@@ -5,7 +5,7 @@ $Computer_list = (Get-ADComputer -Filter * -Properties * -SearchBase "OU=Compute
 
 foreach($computer in $Computer_list){
 
-Invoke-Command -ComputerName $computer -ScriptBlock {gpupdate /force}
+Invoke-Command -ComputerName $computer -ScriptBlock {gpupdate /force} -asjob
 
 
 }
