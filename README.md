@@ -3,6 +3,12 @@
 
 [Creator | Sébastien Maltais](https://twitter.com/seb_maltais)
 
+[
+  ![Donate with PayPal]
+  (https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png)
+]
+(https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QT54MSJR6QU7Y)
+
 #### EN
 The persistance is the only way to get a sucess in a PowerShell environment. More you persist more you become persistant. If you persist in this way. The Powershell environment open for you a new world of concept. You cant imagine it before you have learned it.
 
