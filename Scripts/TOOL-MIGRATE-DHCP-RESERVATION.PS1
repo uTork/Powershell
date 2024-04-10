@@ -3,10 +3,10 @@
 ## Need domain admin right
 
 
-$dhcp_server = Get-DhcpServerv4Reservation -ScopeId 10.72.64.0 -ComputerName Server-1
+$dhcp_server_scource = Get-DhcpServerv4Reservation -ScopeId 10.72.64.0 -ComputerName Server-1
 
 
-foreach($res in $dhcp_server){
+foreach($res in $dhcp_server_scource){
 
 $ip_reservation = $res.IPAddress
 $scope = "10.72.64.0"
