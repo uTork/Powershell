@@ -4,7 +4,7 @@
 $user_list | foreach{
 
                     $username = $_.samaccountname
-                    $smtp_address = "$username@octavie.onmicrosoft.com"
+                    $smtp_address = "$username" + "@octavie.onmicrosoft.com"
                      
 
 Set-ADUser -Identity $_ -Replace @{'ProxyAddresses'="SMTP:$smtp_address"}
