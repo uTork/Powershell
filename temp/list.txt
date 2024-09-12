@@ -1,5 +1,0 @@
-"email","name"
-"sss@ddd.com","Sebastien Maltais"
-"fufuf@itre.com","Roger Turbo"
-"eee@trois.coom","Eric Temblay"
-"www@sss.com","Willy Bedard"
