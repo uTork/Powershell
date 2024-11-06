@@ -10,8 +10,6 @@
 $servers = (Get-ADComputer -Filter * -Properties * | Where-Object {$_.operatingsystem -like "*server*"}).name
 
 
-
-
 foreach($srv in $servers){
 
 #ping test to test the connectivity of the server
