@@ -23,8 +23,8 @@ La persistencia es la única forma de tener éxito en un entorno PowerShell. Cua
 #### CH
 持久性是在PowerShell环境中成功的唯一方法。 坚持得越多，就变得越执着。 如果您坚持这种方式。 Powershell环境打开了一个新的概念世界。 学习之前无法想象。
 
-#### RU
-Настойчивость — единственный способ добиться успеха в среде PowerShell. Чем больше вы настойчивы, тем настойчивее вы становитесь. Если вы будете упорствовать на этом пути. Среда Powershell открывает для вас новый мир концепций. Этого невозможно представить, пока не узнаешь.
+#### UK
+Наполегливість — єдиний спосіб досягти успіху в середовищі PowerShell. Чим більше ви наполягаєте, тим наполегливішими стаєте. Якщо ви наполягатимете на цьому шляху. Середовище Powershell відкриває для вас новий світ концепцій. Цього неможливо уявити, поки не навчишся.
 
 [logo]: https://raw.githubusercontent.com/PowerShell/PowerShell/master/assets/ps_black_64.svg?sanitize=true
 ##### Microsoft Repository: [Powershell Gallery](https://www.powershellgallery.com/)
